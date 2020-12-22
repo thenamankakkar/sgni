@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_profile"
+            android:title="Profile" />
+
+        <item
+            android:id="@+id/nav_wallet"
+            android:icon="@drawable/ic_wallet"
+            android:title="My Wallet" />
+
+        <item
+            android:id="@+id/nav_booking"
+            android:icon="@drawable/ic_booking"
+            android:title="My Booking" />
+
+        <item
+            android:id="@+id/nav_terms"
+            android:icon="@drawable/privacylogo"
+            android:title="Terms" />
+    </group>
+
+    <item android:title="Find us at">
+        <menu>
+            <item
+                android:id="@+id/nav_fb"
+                android:icon="@drawable/ic_facebook"
+                android:title="Facebook" />
+            <item
+                android:id="@+id/nav_insta"
+                android:icon="@drawable/ic_insta"
+                android:title="Instagram" />
+
+            <item
+                android:id="@+id/nav_linkedin"
+                android:icon="@drawable/ic_linkedin"
+                android:title="Linked In" />
+            <item
+                android:id="@+id/nav_twitter"
+                android:icon="@drawable/ic_twitter"
+                android:title="Twitter" />
+
+        </menu>
+    </item>
+
+    <item android:title="More">
+        <menu>
+
+            <item
+                android:id="@+id/nav_review"
+                android:icon="@drawable/ic_reviewus"
+                android:title="Review us" />
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/menu_share" />
+
+
+        </menu>
+    </item>
+</menu>

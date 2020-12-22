@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">SGNI.in</string>
+
+
+    <string name="title_activity_main"></string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">A Product of</string>
+    <string name="nav_header_subtitle">4uappsstudio@gmail.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Privacy Policy</string>
+
+    <string name="menu_home">Reload</string>
+    <string name="menu_gallery">Privacy Policy</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_game">Play Instant Games</string>
+    <string name="menu_send">Rate us</string>
+
+
+</resources>
