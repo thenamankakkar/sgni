@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".Location_List"></activity>
+        <activity android:name=".Location_vise_bookcourse"></activity>
+        <activity android:name=".Location_List" />
         <activity android:name=".CitiesListView" />
         <activity android:name=".OTP_register" />
         <activity android:name=".MainActivity" />

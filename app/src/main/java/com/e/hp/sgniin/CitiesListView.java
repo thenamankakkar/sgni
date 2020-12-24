@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CitiesListView extends AppCompatActivity {
 
@@ -94,6 +95,8 @@ public class CitiesListView extends AppCompatActivity {
                         loading.dismiss();
                         Log.d("registe_resonse", "" + response);
 
+
+
                         try {
                             ArrayList<String> name = new ArrayList<String>();
                             ArrayList<String> parent_location = new ArrayList<String>();
@@ -129,20 +132,11 @@ public class CitiesListView extends AppCompatActivity {
                                     intent.putExtra("res_parent",parent_location.get(position));
                                     startActivity(intent);
 
-                                    Toast.makeText(CitiesListView.this, name.get(position), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(CitiesListView.this, name.get(position), Toast.LENGTH_SHORT).show();
 
 
                                 }
                             });
-
-
-
-
-
-
-
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

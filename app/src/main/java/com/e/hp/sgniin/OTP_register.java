@@ -116,25 +116,25 @@ public class OTP_register extends AppCompatActivity
                         .setPriority(Priority.MEDIUM)
                         .build()
                         .getAsJSONObject(new JSONObjectRequestListener() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                progressdialog.dismiss();
-
-                                ProgressDialog OtpSent = new ProgressDialog(OTP_register.this);
-                                OtpSent.setTitle("Check your Inbox");
-                                OtpSent.setMessage(" OTP has been sent to you number");
-                                OtpSent.setMax(5);
-                                OtpSent.setCancelable(false);
-
-                                OtpSent.setButton(DialogInterface.BUTTON_NEGATIVE, "Okay", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        OtpSent.dismiss();//dismiss dialog
-                                    }
-                                });
+                                             @Override
+                                             public void onResponse(JSONObject response) {
+                                                 progressdialog.dismiss();
 
 
-                                OtpSent.show();
+
+
+                                                 AlertDialog.Builder builder = new AlertDialog.Builder(
+                                                         OTP_register.this);
+                                                 builder.setTitle("Check Your Inbox");
+                                                 builder.setMessage("OTP has been sent to your number");
+                                                 builder.setPositiveButton("OK",
+                                                         new DialogInterface.OnClickListener() {
+                                                             public void onClick(DialogInterface dialog,
+                                                                                 int which) {
+                                                                 dialog.dismiss();
+                                                                  }
+                                                         });
+                                                 builder.show();
 
 
                                 Log.d("registe_resonse", "" + response);
@@ -151,7 +151,7 @@ public class OTP_register extends AppCompatActivity
                                         Log.d("get_register_phone", "" + getphone);
                                         Log.d("studentid", "" + studentid);
                                         Log.d("scode", "" + scode);
-                                        Log.d("otp", "" + otp);
+                                        Log.d("response_otp", "" + otp);
                                         Log.d("vkey", "" + vkey);
                                     }
                                     ed_phone.setEnabled(false);

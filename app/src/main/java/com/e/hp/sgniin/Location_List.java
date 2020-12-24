@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -27,17 +30,22 @@ public class Location_List extends AppCompatActivity {
 
     ProgressDialog loading;
 
-    String res_locations, res_parent, res_slug,get_res_parent;
+    String res_locations, res_parent, res_slug, get_res_parent;
+
+    String res_loc_id;
 
     // Array of strings...
     ArrayAdapter<String> adapter;
     Integer loc;
 
+
+    private ArrayList<String> cityLocationId = new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location__list);
-
 
 
         //progress dialog
@@ -53,7 +61,7 @@ public class Location_List extends AppCompatActivity {
         String get_res_location = intent.getStringExtra("res_locations");
         get_res_parent = intent.getStringExtra("res_parent");
 
-        Toast.makeText(this, "" + get_res_parent, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "" + get_res_parent, Toast.LENGTH_SHORT).show();
 
 
         EditText inputSearch = (EditText) findViewById(R.id.inputSearch);
@@ -102,21 +110,40 @@ public class Location_List extends AppCompatActivity {
                         Log.d("location_resonse", "" + response);
 
                         try {
-                            ArrayList<String> res_slug_value = new ArrayList<String>();
+                            ArrayList<String> res_locid_value = new ArrayList<String>();
+                            ArrayList<String> asli_res_locid = new ArrayList<String>();
                             JSONArray contacts = response.getJSONArray("data");
                             for (int i = 0; i < contacts.length(); i++) {
                                 JSONObject c = contacts.getJSONObject(i);
                                 res_slug = c.getString("location");
+                                res_loc_id = c.getString("locid");
+                                cityLocationId.add(res_loc_id);
+                                res_locid_value.add(res_slug);
 
-                                res_slug_value.add(res_slug);
                                 Log.d("res_slug", "" + res_slug);
+
 
                             }
 
-                            adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.location_info, R.id.userInfo, res_slug_value);
+                            adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.location_info, R.id.userInfo, res_locid_value);
                             android.widget.ListView list = (android.widget.ListView) findViewById(R.id.simpleListView);
                             list.setAdapter(adapter);
                             list.setTextFilterEnabled(true);
+                            list.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+
+
+                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view,
+                                                        int position, long id) {
+
+                                    /*Toast.makeText(Location_List.this, "Item Clicked", Toast.LENGTH_SHORT).show();*/
+                                    Intent intent = new Intent(Location_List.this, Location_vise_bookcourse.class);
+                                    intent.putExtra("response_locid",cityLocationId.get(position));
+                                    startActivity(intent);
+                                }
+                            });
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -129,7 +156,6 @@ public class Location_List extends AppCompatActivity {
                         Log.d("error", "ha ha" + error);
                     }
                 });
-
 
 
     }

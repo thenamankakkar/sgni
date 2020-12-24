@@ -2,18 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorblack_900">
+    android:background="@color/colorPrimary">
 
     <TextView
         android:id="@+id/userInfo"
         android:textSize="25sp"
         android:textStyle="bold"
         android:layout_gravity="center"
-        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:background="@null"
         android:paddingTop="15dp"
+        android:paddingLeft="15dp"
         android:paddingBottom="15dp"
-        android:textColor="@color/white"
+        android:drawableRight="@drawable/listview_arrow"
+        android:drawablePadding="5dp"
+        android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
