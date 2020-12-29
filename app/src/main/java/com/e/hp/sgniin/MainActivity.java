@@ -12,7 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -71,10 +75,18 @@ public class MainActivity extends AppCompatActivity
     /*intent values variable*/
     String user_phone_no, student_id, intent_scode, student_otp, user_vkey;
 
+
+    public static final String Name = "nameKey";
+    SharedPreferences myPrefs;
+    public static final String mypreference = "mypref";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
         user_phone_no = getIntent().getExtras().getString("user_phone_no");
         student_id = getIntent().getExtras().getString("student_id");
         intent_scode = getIntent().getExtras().getString("scode");
@@ -112,6 +124,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
     }
+
+
+
     /*recycler view code*/
     private void phoneRecycler() {
 
@@ -217,25 +232,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public void onBackPressed() {
 
@@ -292,6 +288,18 @@ public class MainActivity extends AppCompatActivity
            /*
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/open?id=19bKIjmuoQEgeIw6Jx6aJWmuZZrSwVIEl"));
             startActivity(i);*/
+
+            myPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+            SharedPreferences settings = MainActivity.this.getSharedPreferences(mypreference, MainActivity.MODE_PRIVATE);
+            settings.edit().remove(Name).apply();
+
+            Intent intent = new Intent(MainActivity.this,OTP_register.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+
+
+
         }
 
 

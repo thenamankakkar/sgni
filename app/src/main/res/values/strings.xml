@@ -17,6 +17,7 @@
     <string name="menu_share">Share</string>
     <string name="menu_game">Play Instant Games</string>
     <string name="menu_send">Rate us</string>
+    <string name="submit_text">By submitting the request, you accept our terms of use and privacy policy.</string>
 
 
 </resources>

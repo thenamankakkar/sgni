@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -22,20 +25,21 @@ import java.util.List;
 
 public class Location_vise_bookcourse extends AppCompatActivity {
     RecyclerView recyclerView;
-    String course_res_name,course_res_address,course_res_views;
+    String course_res_name, course_res_address, course_res_views;
 
     private CourseAdapter mAdapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_vise_bookcourse);
 
+
         Intent intent = getIntent();
         String gotintentofLocationID = intent.getStringExtra("response_locid");
         /*Toast.makeText(this, gotintentofLocationID, Toast.LENGTH_SHORT).show();*/
-
-
 
 
         //networking libray intialization
@@ -52,9 +56,9 @@ public class Location_vise_bookcourse extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
 
 
-                        if(response != null && response.length() > 0 ){
+                        if (response != null && response.length() > 0) {
 
-                            List<CourseData> data=new ArrayList<>();
+                            List<CourseData> data = new ArrayList<>();
 
 
                             Log.d("response_course", "" + response);
@@ -68,7 +72,8 @@ public class Location_vise_bookcourse extends AppCompatActivity {
                                     JSONObject c = contacts.getJSONObject(i);
                                     fishData.fishName = c.getString("name");
                                     fishData.fishaddress = c.getString("address");
-                                    /* course_res_views = c.getString("Views");*/
+                                    fishData.fishviews = c.getString("Views");
+                                    fishData.inst_name = c.getString("name");
 
                                     data.add(fishData);
 
@@ -104,8 +109,6 @@ public class Location_vise_bookcourse extends AppCompatActivity {
                         Log.d("error", "ha ha" + error);
                     }
                 });
-
-
 
 
     }

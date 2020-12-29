@@ -8,9 +8,13 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -53,10 +57,17 @@ public class OTP_register extends AppCompatActivity
 
     String getOtp;
 
+
+    /*varibles to add the user in local db*/
+    public static final String Name = "nameKey";
+    SharedPreferences myPrefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_o_t_p_register);
+
+
         //custom progress instance
         customProgress = No_Internet.getInstance();
 
@@ -111,30 +122,30 @@ public class OTP_register extends AppCompatActivity
                         .addBodyParameter("pass", "")
                         .addBodyParameter("name", "")
                         .addBodyParameter("phone", getPhone)
-                        .addBodyParameter("ref", "getRef")
+                        .addBodyParameter("ref", getRef)
                         .setTag("test")
                         .setPriority(Priority.MEDIUM)
                         .build()
                         .getAsJSONObject(new JSONObjectRequestListener() {
-                                             @Override
-                                             public void onResponse(JSONObject response) {
-                                                 progressdialog.dismiss();
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                progressdialog.dismiss();
 
 
 
 
-                                                 AlertDialog.Builder builder = new AlertDialog.Builder(
-                                                         OTP_register.this);
-                                                 builder.setTitle("Check Your Inbox");
-                                                 builder.setMessage("OTP has been sent to your number");
-                                                 builder.setPositiveButton("OK",
-                                                         new DialogInterface.OnClickListener() {
-                                                             public void onClick(DialogInterface dialog,
-                                                                                 int which) {
-                                                                 dialog.dismiss();
-                                                                  }
-                                                         });
-                                                 builder.show();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(
+                                        OTP_register.this);
+                                builder.setTitle("Check Your Inbox");
+                                builder.setMessage("OTP has been sent to your number");
+                                builder.setPositiveButton("OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,
+                                                                int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                builder.show();
 
 
                                 Log.d("registe_resonse", "" + response);
@@ -199,6 +210,10 @@ public class OTP_register extends AppCompatActivity
                 if (getOtp.equals(otp)) {
                     /*Pass the dashboard intent*/
                     progress_verifyotp.dismiss();
+
+
+
+
 
                     Intent intent = new Intent(OTP_register.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -336,4 +351,6 @@ public class OTP_register extends AppCompatActivity
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+
 }
