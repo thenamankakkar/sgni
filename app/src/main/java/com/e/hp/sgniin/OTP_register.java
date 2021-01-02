@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -59,13 +60,82 @@ public class OTP_register extends AppCompatActivity
 
 
     /*varibles to add the user in local db*/
-    public static final String Name = "nameKey";
-    SharedPreferences myPrefs;
+    SharedPreferences sharedPreferences;
+    public static final String mypreference = "mypref";
+    public static final String Phone = "nameKey";
+    String registeredno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_o_t_p_register);
+
+        sharedPreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
+
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                //TODO your background code
+
+                if (sharedPreferences.contains(Phone)) {
+
+                    registeredno = sharedPreferences.getString(Phone, "");
+
+/*                    Toast.makeText(getApplicationContext(), registeredno, Toast.LENGTH_SHORT).show();*/
+
+                    //networking libray intialization
+                    AndroidNetworking.initialize(getApplicationContext());
+                    /*auto-login*/
+                    AndroidNetworking.post("https://sgni.in/api/run_new.php")
+
+                            .addBodyParameter("call", "autologin")
+                            .addBodyParameter("param", registeredno)
+
+                            .setTag("test")
+                            .setPriority(Priority.MEDIUM)
+                            .build()
+                            .getAsJSONObject(new JSONObjectRequestListener() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Intent intent = new Intent(OTP_register.this, MainActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+
+
+                                    Log.d("sharepreference", "" + response);
+
+                                    try {
+                                        JSONArray contacts = response.getJSONArray("data");
+                                        for (int i = 0; i < contacts.length(); i++) {
+                                            JSONObject c = contacts.getJSONObject(i);
+
+                                        }
+
+
+
+                                        Log.d("register_phone", "" + contacts);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                }
+
+                                @Override
+                                public void onError(ANError error) {
+                                    // handle error
+                                    Log.d("error", "ha ha" + error);
+                                }
+                            });
+
+                }
+            }
+        });
+
+
+
 
 
         //custom progress instance
@@ -91,8 +161,8 @@ public class OTP_register extends AppCompatActivity
         progress_verifyotp.setCancelable(false);
 
 
-        //networking libray intialization
-        AndroidNetworking.initialize(getApplicationContext());
+
+
 
         ed_phone = (EditText) findViewById(R.id.ed_phone);
         ed_ref = (EditText) findViewById(R.id.ed_ref);
@@ -130,8 +200,6 @@ public class OTP_register extends AppCompatActivity
                             @Override
                             public void onResponse(JSONObject response) {
                                 progressdialog.dismiss();
-
-
 
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -213,6 +281,16 @@ public class OTP_register extends AppCompatActivity
 
 
 
+
+/*
+                    if (sharedPreferences.contains(Name)) {
+
+                    }*/
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(Phone, getPhone);
+                    editor.apply();
+                    editor.commit();
 
 
                     Intent intent = new Intent(OTP_register.this, MainActivity.class);

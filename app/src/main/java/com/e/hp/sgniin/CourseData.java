@@ -5,4 +5,11 @@ public class CourseData {
     public String fishaddress;
     public String fishviews;
     public String inst_name;
+
+
+    public String institute_id;
+    public String course_id;
+
+
+
 }

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -48,6 +49,8 @@ import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterView.OnItemSelectedListener {
 
+    String __instituteId, __courseId;
+
     Dialog myDialog;
 
     private Context context;
@@ -63,6 +66,8 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     ProgressDialog progressDialog;
 
     String[] country = {"Anytime", "9-12", "12-3", "3-6"};
+
+    CourseData fishdata;
 
 
     // create constructor to innitilize context and data sent from MainActivity
@@ -91,6 +96,15 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         myHolder.location.setText(current.fishaddress);
         myHolder.views.setText(current.fishviews);
         myHolder.inst_name.setText(current.inst_name);
+
+
+    /*    myHolder.btn_know_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,BookNow.class);
+                context.startActivity(intent);
+            }
+        });*/
 
 
         myHolder.btn_enquire_now.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +143,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 btn_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       // Toast.makeText(context, "cancel button clicked", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(context, "cancel button clicked", Toast.LENGTH_SHORT).show();
                         myDialog.dismiss();
                     }
                 });
@@ -201,6 +215,27 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         });
 
 
+        /*know more button code*/
+        myHolder.btn_know_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             /*   Intent intent = new Intent(context,KnowMore.class);
+                context.startActivity(intent);*/
+
+                CourseData current = data.get(position);
+                __instituteId = current.institute_id;
+                __courseId = current.course_id;
+                Intent intent = new Intent(context, KnowMore.class);
+                intent.putExtra("__instituteId", __instituteId);
+                intent.putExtra("__courseId", __courseId);
+                context.startActivity(intent);
+
+
+                Log.d("testdata", __instituteId + " testdata2 " + __courseId);
+            }
+        });
+
+
     }
 
 
@@ -221,7 +256,6 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (get_dialog_phone.isEmpty()) {
                 ed_mobile.setError("Please Enter Phone");
             }
-
         }
 
         @Override
@@ -270,7 +304,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         ImageView movieImage;
         TextView location, institutename;
         TextView views, inst_name;
-        Button btn_enquire_now;
+        Button btn_enquire_now, btn_know_more;
 
 
         // create constructor to get widget reference
@@ -283,6 +317,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             views = itemView.findViewById(R.id.views);
             inst_name = itemView.findViewById(R.id.course);
             btn_enquire_now = itemView.findViewById(R.id.enquirenow);
+            btn_know_more = itemView.findViewById(R.id.know_more);
 
             //networking libray intialization
             AndroidNetworking.initialize(context);

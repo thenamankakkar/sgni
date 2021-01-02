@@ -55,7 +55,6 @@ public class Location_vise_bookcourse extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
 
-
                         if (response != null && response.length() > 0) {
 
                             List<CourseData> data = new ArrayList<>();
@@ -74,8 +73,11 @@ public class Location_vise_bookcourse extends AppCompatActivity {
                                     fishData.fishaddress = c.getString("address");
                                     fishData.fishviews = c.getString("Views");
                                     fishData.inst_name = c.getString("name");
+                                    fishData.institute_id = c.getString("inst_id");
+                                    fishData.course_id = c.getString("inst_cid");
 
                                     data.add(fishData);
+
 
                            /*     CourseViewData model = new CourseViewData(course_res_name,course_res_address,R.drawable.batman);
                                 data.add(model);*/
