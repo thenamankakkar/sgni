@@ -93,7 +93,8 @@ public class CitiesListView extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         loading.dismiss();
-                        Log.d("registe_resonse", "" + response);
+                        Log.d("cities_resonse", "" + response);
+
 
 
 

@@ -53,7 +53,7 @@ public class Location_List extends AppCompatActivity {
         loading.setTitle("Please Wait..");
         loading.setMessage("Loading .....");
         loading.setMax(5);
-        loading.setCancelable(false);
+        loading.setCancelable(true);
         loading.show();
 
 
@@ -109,11 +109,17 @@ public class Location_List extends AppCompatActivity {
 
                         Log.d("location_resonse", "" + response);
 
+
                         try {
                             ArrayList<String> res_locid_value = new ArrayList<String>();
                             ArrayList<String> asli_res_locid = new ArrayList<String>();
                             JSONArray contacts = response.getJSONArray("data");
                             for (int i = 0; i < contacts.length(); i++) {
+                                if (contacts.length()<=0)
+                                {
+                                    Toast.makeText(Location_List.this, "response is null", Toast.LENGTH_SHORT).show();
+                                }
+
                                 JSONObject c = contacts.getJSONObject(i);
                                 res_slug = c.getString("location");
                                 res_loc_id = c.getString("locid");

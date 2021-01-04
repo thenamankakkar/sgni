@@ -9,12 +9,13 @@
 
     <EditText
         android:id="@+id/inputSearch"
+        android:drawableLeft="@drawable/search"
+        android:paddingLeft="15dp"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:background="@color/colorPrimary"
         android:cursorVisible="true"
         android:ems="10"
-        android:gravity="center"
         android:hint="Search Your City"
         android:inputType="textVisiblePassword"
         android:textColor="@color/black"

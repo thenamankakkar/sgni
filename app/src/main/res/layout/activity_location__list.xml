@@ -11,10 +11,12 @@
         android:id="@+id/inputSearch"
         android:layout_width="match_parent"
         android:layout_height="65dp"
+        android:drawableLeft="@drawable/search"
+        android:paddingLeft="15dp"
         android:background="@color/colorPrimary"
         android:cursorVisible="true"
         android:ems="10"
-        android:gravity="center"
+
         android:hint="Search Your Location"
         android:inputType="textVisiblePassword"
         android:textColor="@color/black"
