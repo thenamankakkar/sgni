@@ -30,7 +30,6 @@ public class Location_vise_bookcourse extends AppCompatActivity {
     private CourseAdapter mAdapter;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +65,7 @@ public class Location_vise_bookcourse extends AppCompatActivity {
                                 JSONArray contacts = response.getJSONArray("data");
                                 for (int i = 0; i < contacts.length(); i++) {
 
-                                    if (contacts.isNull(0))
-                                    {
+                                    if (contacts.isNull(0)) {
                                         Toast.makeText(Location_vise_bookcourse.this, "response is null", Toast.LENGTH_SHORT).show();
                                     }
                                     CourseData fishData = new CourseData();

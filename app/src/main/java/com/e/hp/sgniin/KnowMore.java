@@ -32,6 +32,8 @@ public class KnowMore extends AppCompatActivity {
 
     String res_loc_id;
 
+    ProgressDialog loading;
+
     // Array of strings...
     ArrayAdapter<String> adapter;
     private ArrayList<String> __courseIdInItem = new ArrayList<>();
@@ -40,25 +42,41 @@ public class KnowMore extends AppCompatActivity {
     /*variables for json response*/
     String fees, finalfees, markup, course_id, course_id2,coursename;
 
-    String __instituteId, __courseId;
-
+    String __instituteId, __courseId,__institutename,__instituteaddress;
+    ArrayList<itemModel> arrayList;
+    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_know_more);
+        TextView instituteName =(TextView)findViewById(R.id.instituteName);
+        TextView institueAddress=(TextView)findViewById(R.id.instituteAddress);
+        listView = (ListView) findViewById(R.id.courseListView);
+        arrayList = new ArrayList<>();
 
 
-
+        //progress dialog
+        loading = new ProgressDialog(this);
+        loading.setTitle("Please Wait..");
+        loading.setMessage("Data is Loading .....");
+        loading.setMax(5);
+        loading.setCancelable(false);
+        loading.show();
 
         /*getting the particular course/ institute ID's */
         Intent intent = getIntent();
         __instituteId = intent.getStringExtra("__instituteId");
         __courseId = intent.getStringExtra("__courseId");
+        __institutename = intent.getStringExtra("__institutename");
+        __instituteaddress = intent.getStringExtra("__instituteaddress");
+        instituteName.setText(__institutename);
+        institueAddress.setText(__instituteaddress);
+
 
 
         //networking libray intialization
         AndroidNetworking.initialize(getApplicationContext());
-        Toast.makeText(this, "" + __instituteId, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "" + __instituteId, Toast.LENGTH_SHORT).show();
 
 
         AndroidNetworking.post("https://sgni.in/api/run_new.php")
@@ -71,13 +89,15 @@ public class KnowMore extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        loading.dismiss();
 
                         if (response != null && response.length() > 0) {
 
                             Log.d("response_knowmore", "" + response);
                             try {
                                 ArrayList<String> res_locid_value = new ArrayList<String>();
-                                ArrayList<String> asli_res_locid = new ArrayList<String>();
+                                ArrayList<itemModel> arrayList = new ArrayList<>();
+                                ArrayList<String> course_name = new ArrayList<String>();
                                 JSONArray contacts = response.getJSONArray("data");
                                 for (int i = 0; i < contacts.length(); i++) {
 
@@ -89,74 +109,34 @@ public class KnowMore extends AppCompatActivity {
                                     course_id = c.getString("cid");
                                     coursename = c.getString("coursename");
 
-                                    /*second api call start*/
-                                    AndroidNetworking.post("https://sgni.in/api/run_new.php")
-
-                                            .addBodyParameter("call", "Get_Course_Name")
-                                            .addBodyParameter("param", course_id)
-                                            .setTag("test")
-                                            .setPriority(Priority.MEDIUM)
-                                            .build()
-                                            .getAsJSONObject(new JSONObjectRequestListener() {
-                                                @Override
-                                                public void onResponse(JSONObject response) {
-
-                                                    if (response != null && response.length() > 0) {
-
-                                                        List<CourseData> data = new ArrayList<>();
 
 
-                                                        Log.d("response_getcoursename", "" + response);
-                   /*                                     try {
+                                    itemModel model = new itemModel();
 
-                                                            JSONArray contacts = response.getJSONArray("data");
-                                                            for (int i = 0; i < contacts.length(); i++) {
-
-                                                                JSONObject c = contacts.getJSONObject(i);
-                                                                course_id2 = c.getString("cid");
-
-                                                            }
-                                                        } catch (JSONException e) {
-                                                            e.printStackTrace();
-                                                        }*/
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onError(ANError error) {
-                                                    // handle error
-                                                    Log.d("error", "ha ha" + error);
-                                                }
-                                            });
-                                    /*second api call end*/
+                                    model.setCourseName(coursename);
+                                    model.setFees(fees);
+                                    model.setFees2("\u20B9"+finalfees);
+                                    arrayList.add(model);
 
 
 
-
-                                    __courseIdInItem.add(fees);
+                                 /*   __courseIdInItem.add(fees);
                                     res_locid_value.add(course_id);
+                                    course_name.add(course_id);
                                     Log.d("res_slug", "" + res_slug);
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
                                 }
+                                ListViewCoursesAdapter adapter = new ListViewCoursesAdapter(KnowMore.this, arrayList);
+                                listView.setAdapter(adapter);
 
-                                adapter = new ArrayAdapter<String>(KnowMore.this, R.layout.course_info, R.id.userInfo, res_locid_value);
+
+
+/*                                adapter = new ArrayAdapter<String>(KnowMore.this, R.layout.course_info, res_locid_value);
                                 android.widget.ListView list = (android.widget.ListView) findViewById(R.id.courseListView);
-                                list.setAdapter(adapter);
-                                list.setTextFilterEnabled(true);
-                                list.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
-                                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                list.setAdapter(adapter);*/
+                                listView.setTextFilterEnabled(true);
+                                listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view,

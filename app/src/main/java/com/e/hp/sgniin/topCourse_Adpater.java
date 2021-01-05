@@ -39,7 +39,7 @@ import java.util.List;
 
 public class topCourse_Adpater extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterView.OnItemSelectedListener {
 
-    String __instituteId, __courseId;
+    String __instituteId, __courseId, __institutename, __instituteaddress;
 
     Dialog myDialog;
 
@@ -90,7 +90,16 @@ CourseData current = data.get(position);
         myHolder.btn_know_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,BookNow.class);
+                CourseData current = data.get(position);
+                __instituteId = current.institute_id;
+                __courseId = current.course_id;
+                __institutename = current.fishName;
+                __instituteaddress = current.fishaddress;
+                Intent intent = new Intent(context, KnowMore.class);
+                intent.putExtra("__instituteId", __instituteId);
+                intent.putExtra("__courseId", __courseId);
+                intent.putExtra("__institutename", __institutename);
+                intent.putExtra("__instituteaddress", __instituteaddress);
                 context.startActivity(intent);
             }
         });
