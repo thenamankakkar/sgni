@@ -38,7 +38,7 @@ public class KnowMore extends AppCompatActivity {
 
 
     /*variables for json response*/
-    String fees, finalfees, markup, course_id, course_id2;
+    String fees, finalfees, markup, course_id, course_id2,coursename;
 
     String __instituteId, __courseId;
 
@@ -87,6 +87,7 @@ public class KnowMore extends AppCompatActivity {
                                     finalfees = c.getString("final_fees");
                                     markup = c.getString("markup");
                                     course_id = c.getString("cid");
+                                    coursename = c.getString("coursename");
 
                                     /*second api call start*/
                                     AndroidNetworking.post("https://sgni.in/api/run_new.php")
