@@ -42,9 +42,11 @@ public class KnowMore extends AppCompatActivity {
     /*variables for json response*/
     String fees, finalfees, markup, course_id, course_id2,coursename;
 
-    String __instituteId, __courseId,__institutename,__instituteaddress;
+   public String __instituteId, __courseId,__institutename,__instituteaddress;
     ArrayList<itemModel> arrayList;
     ListView listView;
+
+    String pakkawalainstitutename;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +73,13 @@ public class KnowMore extends AppCompatActivity {
         __instituteaddress = intent.getStringExtra("__instituteaddress");
         instituteName.setText(__institutename);
         institueAddress.setText(__instituteaddress);
+
+        itemModel model = new itemModel();
+        model.setinstitute_name(__institutename);
+
+
+       /* Toast.makeText(this, model.getinstitute_name(), Toast.LENGTH_SHORT).show();*/
+
 
 
 
@@ -106,7 +115,8 @@ public class KnowMore extends AppCompatActivity {
                                     fees = c.getString("fees");
                                     finalfees = c.getString("final_fees");
                                     markup = c.getString("markup");
-                                    course_id = c.getString("cid");
+                                    //course_id = c.getString("cid");
+                                    course_id = c.getString("inst_cid");
                                     coursename = c.getString("coursename");
 
 
@@ -115,6 +125,7 @@ public class KnowMore extends AppCompatActivity {
 
                                     model.setCourseName(coursename);
                                     model.setFees(fees);
+                                    model.setinst_cid(course_id);
                                     model.setFees2("\u20B9"+finalfees);
                                     arrayList.add(model);
 
@@ -126,7 +137,7 @@ public class KnowMore extends AppCompatActivity {
                                     Log.d("res_slug", "" + res_slug);
 */
                                 }
-                                ListViewCoursesAdapter adapter = new ListViewCoursesAdapter(KnowMore.this, arrayList);
+                                ListViewCoursesAdapter adapter = new ListViewCoursesAdapter(KnowMore.this, arrayList,__instituteaddress,__institutename);
                                 listView.setAdapter(adapter);
 
 

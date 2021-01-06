@@ -1,35 +1,25 @@
 package com.e.hp.sgniin;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-public class ListViewCoursesAdapter extends BaseAdapter {
-
+public class ListViewCourseDuration extends BaseAdapter {
     Context context;
-    ArrayList<itemModel> arrayList;
-    String __institutename,__instituteaddress;
+    ArrayList<itemCourseDurationModel> arrayList;
 
-    public ListViewCoursesAdapter(Context context, ArrayList<itemModel> arrayList, String __instituteaddress, String __institutename) {
+
+    public ListViewCourseDuration(Context context, ArrayList<itemCourseDurationModel> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
-        this.__instituteaddress=__instituteaddress;
-        this.__institutename=__institutename;
 
     }
 
@@ -51,24 +41,32 @@ public class ListViewCoursesAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+
+
+
+
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.course_info, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.course_duration_listinfo, parent, false);
         }
-        TextView courseName,fees,fees2;
-        Button booknow;
+        TextView duration,markup,fees,fees2;
 
-        booknow =(Button) convertView.findViewById(R.id.book_now);
 
-        courseName = (TextView) convertView.findViewById(R.id.courseName);
+        duration = (TextView) convertView.findViewById(R.id.duration);
+        duration.setText(arrayList.get(position).getDuration());
+
         fees = (TextView) convertView.findViewById(R.id.fees);
         fees2 = (TextView) convertView.findViewById(R.id.fees2);
+        markup = (TextView) convertView.findViewById(R.id.markup);
         fees.setPaintFlags(fees.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        courseName.setText(arrayList.get(position).getCourseName());
         fees.setText(arrayList.get(position).getFees());
         fees2.setText(arrayList.get(position).getFees2());
+        markup.setText(arrayList.get(position).getMarkup());
 
 
-        /*book now button code*/
+/*
+        */
+/*book now button code*//*
+
         booknow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,8 +76,10 @@ public class ListViewCoursesAdapter extends BaseAdapter {
 
                 institute_course_id= arrayList.get(position).getinst_cid();
                 courseName= arrayList.get(position).getCourseName();
-              /*  Toast.makeText(context, __institutename, Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, __instituteaddress, Toast.LENGTH_SHORT).show();*/
+              */
+/*  Toast.makeText(context, __institutename, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, __instituteaddress, Toast.LENGTH_SHORT).show();*//*
+
 
                 Intent intent = new Intent(context,BookNow.class);
                 intent.putExtra("institute_course_id",institute_course_id);
@@ -90,6 +90,7 @@ public class ListViewCoursesAdapter extends BaseAdapter {
 
             }
         });
+*/
 
 
         return convertView;

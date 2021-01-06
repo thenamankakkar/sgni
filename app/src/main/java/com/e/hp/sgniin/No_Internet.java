@@ -1,16 +1,21 @@
 package com.e.hp.sgniin;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.security.AccessControlContext;
+
+import static java.security.AccessController.getContext;
+
 public class No_Internet {
     public static No_Internet customProgress = null;
     private Dialog mDialog;
-
     ProgressBar mProgressBar;
 
     public static No_Internet getInstance() {

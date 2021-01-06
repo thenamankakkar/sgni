@@ -54,25 +54,9 @@ public class OTP_register extends AppCompatActivity
     String phone, ref, getPhone, getRef;
     Button register, register2;
 
-    String getphone, studentid, scode, otp, vkey;
-
-    String getOtp;
-
-
-    /*varibles to add the user in local db*/
-    SharedPreferences sharedPreferences;
-    public static final String mypreference = "mypref";
-    public static final String Phone = "nameKey";
-    String registeredno;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_o_t_p_register);
-
-        sharedPreferences = getSharedPreferences(mypreference,
-                Context.MODE_PRIVATE);
-
+    protected void onStart() {
+        super.onStart();
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -83,11 +67,15 @@ public class OTP_register extends AppCompatActivity
 
                     registeredno = sharedPreferences.getString(Phone, "");
 
-/*                    Toast.makeText(getApplicationContext(), registeredno, Toast.LENGTH_SHORT).show();*/
+                    Intent intent = new Intent(OTP_register.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+
+                    /*                    Toast.makeText(getApplicationContext(), registeredno, Toast.LENGTH_SHORT).show();*/
 
                     //networking libray intialization
-                    AndroidNetworking.initialize(getApplicationContext());
-                    /*auto-login*/
+                /*    AndroidNetworking.initialize(getApplicationContext());
+                    *//*auto-login*//*
                     AndroidNetworking.post("https://sgni.in/api/run_new.php")
 
                             .addBodyParameter("call", "autologin")
@@ -128,11 +116,33 @@ public class OTP_register extends AppCompatActivity
                                     // handle error
                                     Log.d("error", "ha ha" + error);
                                 }
-                            });
+                            });*/
 
                 }
             }
         });
+    }
+
+    String getphone, studentid, scode, otp, vkey;
+
+    String getOtp;
+
+
+    /*varibles to add the user in local db*/
+    SharedPreferences sharedPreferences;
+    public static final String mypreference = "mypref";
+    public static final String Phone = "nameKey";
+    String registeredno;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_o_t_p_register);
+
+        sharedPreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
+
+
 
 
 

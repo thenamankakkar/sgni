@@ -5,6 +5,37 @@ public class itemModel {
     String fees;
     String courseName;
     String fees2;
+    String inst_cid;
+    String institute_name,institute_location;
+
+    public String getinstitute_name() {
+        return institute_name;
+    }
+    public void setinstitute_name(String institute_name) {
+        this.institute_name =institute_name;
+
+    }
+
+    public String getinstitute_location() {
+        return institute_location;
+    }
+    public void setinstitute_location(String institute_location) {
+        this.institute_location =institute_location;
+
+    }
+
+
+
+
+    public String getinst_cid() {
+        return inst_cid;
+    }
+    public void setinst_cid(String inst_cid) {
+        this.inst_cid =inst_cid;
+
+    }
+
+
 
     public String getFees() {
         return fees;
