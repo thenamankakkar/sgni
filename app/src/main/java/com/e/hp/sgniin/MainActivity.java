@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity
 
 
     SharedPreferences sharedPreferences;
+    public static final String Studentid = "sid";
     RecyclerView phoneRecycler;
 
     RecyclerView.Adapter adapter;
@@ -164,8 +165,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sharedPreferences = getSharedPreferences(mypreference,
-                Context.MODE_PRIVATE);
+
+        sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+        String value = sharedPreferences.getString(Studentid,"");
+        Toast.makeText(this, value, Toast.LENGTH_SHORT).show();
+
+
+
+
 
         //progress dialog
         topcourse_loading = new ProgressDialog(this);

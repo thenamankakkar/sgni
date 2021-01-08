@@ -36,12 +36,15 @@
     <color name="btn_green">#FF000000</color>
     <color name="btn_dark_grey">#696a67</color>
     <color name="btn_red">#ff1127</color>
+    <color name="cours_name">#ff4d4d</color>
     <color name="btn_light_grey">#adaeab</color>
     <color name="card_background">#e8e8e8</color>
     <color name="green">#49e259</color>
 
-<color name="selectedlist">#ff9d72</color>
+<color name="selectedlist">#ff9999</color>
 <color name="discount_background">#d89216</color>
+<color name="lite_discount_background">#FCF97A</color>
+<color name="starts_from">#ffff4d</color>
 
 
 

@@ -40,7 +40,7 @@ public class KnowMore extends AppCompatActivity {
 
 
     /*variables for json response*/
-    String fees, finalfees, markup, course_id, course_id2,coursename;
+    String fees, finalfees, markup, course_id, cid,coursename;
 
    public String __instituteId, __courseId,__institutename,__instituteaddress;
     ArrayList<itemModel> arrayList;
@@ -118,6 +118,7 @@ public class KnowMore extends AppCompatActivity {
                                     //course_id = c.getString("cid");
                                     course_id = c.getString("inst_cid");
                                     coursename = c.getString("coursename");
+                                    cid = c.getString("cid");
 
 
 
@@ -137,7 +138,7 @@ public class KnowMore extends AppCompatActivity {
                                     Log.d("res_slug", "" + res_slug);
 */
                                 }
-                                ListViewCoursesAdapter adapter = new ListViewCoursesAdapter(KnowMore.this, arrayList,__instituteaddress,__institutename);
+                                ListViewCoursesAdapter adapter = new ListViewCoursesAdapter(KnowMore.this, arrayList,__instituteaddress,__institutename,cid,__instituteId);
                                 listView.setAdapter(adapter);
 
 

@@ -23,13 +23,15 @@ public class ListViewCoursesAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<itemModel> arrayList;
-    String __institutename,__instituteaddress;
+    String __institutename,__instituteaddress,cid,__instituteid;
 
-    public ListViewCoursesAdapter(Context context, ArrayList<itemModel> arrayList, String __instituteaddress, String __institutename) {
+    public ListViewCoursesAdapter(Context context, ArrayList<itemModel> arrayList, String __instituteaddress, String __institutename,String cid,String __instituteid) {
         this.context = context;
         this.arrayList = arrayList;
         this.__instituteaddress=__instituteaddress;
         this.__institutename=__institutename;
+        this.cid=cid;
+        this.__instituteid=__instituteid;
 
     }
 
@@ -80,12 +82,15 @@ public class ListViewCoursesAdapter extends BaseAdapter {
                 courseName= arrayList.get(position).getCourseName();
               /*  Toast.makeText(context, __institutename, Toast.LENGTH_SHORT).show();
                 Toast.makeText(context, __instituteaddress, Toast.LENGTH_SHORT).show();*/
+                Toast.makeText(context, __instituteid, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(context,BookNow.class);
                 intent.putExtra("institute_course_id",institute_course_id);
                 intent.putExtra("courseName",courseName);
                 intent.putExtra("intent_inst_name",__institutename);
                 intent.putExtra("intent_inst_location",__instituteaddress);
+                intent.putExtra("cid",cid);
+                intent.putExtra("institute_id",__instituteid);
                 context.startActivity(intent);
 
             }

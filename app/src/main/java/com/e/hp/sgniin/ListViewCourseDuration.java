@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class ListViewCourseDuration extends BaseAdapter {
+
+    String fees_id;
     Context context;
     ArrayList<itemCourseDurationModel> arrayList;
 
@@ -61,6 +64,9 @@ public class ListViewCourseDuration extends BaseAdapter {
         fees.setText(arrayList.get(position).getFees());
         fees2.setText(arrayList.get(position).getFees2());
         markup.setText(arrayList.get(position).getMarkup());
+
+        fees_id=arrayList.get(position).getFeesid();
+        //Toast.makeText(context, fees_id, Toast.LENGTH_SHORT).show();
 
 
 /*

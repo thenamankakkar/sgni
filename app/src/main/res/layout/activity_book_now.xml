@@ -95,14 +95,14 @@
                         app:cardCornerRadius="25dp">
 
 
-                    <ListView
-                        android:id="@+id/durationListView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:divider="@color/black"
-                        android:choiceMode="singleChoice"
-                        android:dividerHeight="4px" />
+                        <ListView
+                            android:id="@+id/durationListView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:choiceMode="singleChoice"
+                            android:divider="@color/black"
+                            android:dividerHeight="4px" />
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
@@ -121,6 +121,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/starts_from"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:padding="5dp"
                 android:text="Start From"
@@ -142,27 +143,25 @@
 
 
         <LinearLayout
-            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Batch Timings"
-            android:textSize="20dp"
-            android:padding="5dp"
-            android:fontFamily="sans-serif-condensed-medium"/>
+            android:layout_marginTop="15dp">
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:padding="5dp"
+                android:text="Batch Timings"
+                android:textSize="20dp" />
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="sans-serif-condensed"
-                android:text="You may choose from available batch timings below"/>
+                android:text="You may choose from available batch timings below" />
 
 
         </LinearLayout>
@@ -176,58 +175,71 @@
             <Spinner
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
-                android:textAlignment="center"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                android:textAlignment="center" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/fd_card"
-                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-
-
-                    <TextView
-                        android:id="@+id/feeDetails"
-                        android:layout_margin="10dp"
-                        android:textSize="20sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Fee Details" />
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-                    android:gravity="right">
-
-
-                    <TextView
-                        android:id="@+id/fd_discountFees"
-                        android:layout_margin="10dp"
-                        android:textSize="20sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Fee Details" />
+                    android:orientation="vertical">
 
 
                     <TextView
-                        android:id="@+id/fd_dicountoff"
-                        android:textColor="@color/btn_dark_grey"
-                        android:background="@color/discount_background"
-                        android:layout_margin="10dp"
-                        android:textSize="20sp"
+                        android:id="@+id/feeDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fee Details" />
+                        android:layout_margin="10dp"
+                        android:text="Fee Details"
+                        android:textSize="15sp" />
 
-                </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_margin="2dp"
+                        android:background="@color/btn_light_grey" />
 
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right">
+
+
+                        <TextView
+                            android:id="@+id/fd_discountFees"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@color/lite_discount_background"
+                            android:text="Fee Details"
+                            android:textSize="15sp" />
+
+
+                        <TextView
+                            android:id="@+id/fd_dicountoff"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/fee_detail_textview"
+                            android:padding="2dp"
+                            android:text="Fee Details"
+                            android:textColor="@color/white"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_margin="2dp"
+                        android:background="@color/btn_light_grey" />
 
 
                     <LinearLayout
@@ -238,12 +250,12 @@
                         <TextView
                             android:id="@+id/fd_courseName"
 
-                            android:background="@color/btn_red"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:textSize="20sp"
-                            android:text="CourseName"/>
+                            android:background="@color/cours_name"
+                            android:text="CourseName"
+                            android:textSize="15sp" />
 
 
                         <LinearLayout
@@ -253,13 +265,13 @@
 
                             <TextView
                                 android:id="@+id/fd_courseCost"
-                                android:layout_margin="10dp"
-                                android:textSize="20sp"
-                                android:textColor="@color/btn_red"
-
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:text="coursecost" />
+                                android:layout_margin="10dp"
+
+                                android:text="coursecost"
+                                android:textColor="@color/btn_red"
+                                android:textSize="15sp" />
 
                         </LinearLayout>
 
@@ -269,25 +281,22 @@
                 </LinearLayout>
 
 
-
             </androidx.cardview.widget.CardView>
 
 
-
-
             <Button
-                android:layout_marginTop="150dp"
+                android:id="@+id/pay_at_center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="100dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/save_upto_corner"
-                android:text="Pay At Center"
-                android:textStyle="bold"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:text="Pay At Center"
+                android:textStyle="bold" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>

@@ -132,6 +132,7 @@ public class OTP_register extends AppCompatActivity
     SharedPreferences sharedPreferences;
     public static final String mypreference = "mypref";
     public static final String Phone = "nameKey";
+    public static final String Studentid = "sid";
     String registeredno;
 
     @Override
@@ -243,6 +244,9 @@ public class OTP_register extends AppCompatActivity
                                         Log.d("response_otp", "" + otp);
                                         Log.d("vkey", "" + vkey);
                                     }
+
+
+
                                     ed_phone.setEnabled(false);
                                     ed_ref.setEnabled(false);
                                     register.setText("Verify OTP");
@@ -299,6 +303,7 @@ public class OTP_register extends AppCompatActivity
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(Phone, getPhone);
+                    editor.putString(Studentid,studentid );
                     editor.apply();
                     editor.commit();
 
