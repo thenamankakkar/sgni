@@ -294,6 +294,7 @@
                 android:background="@drawable/save_upto_corner"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="Pay At Center"
+                android:enabled="false"
                 android:textStyle="bold" />
 
         </LinearLayout>

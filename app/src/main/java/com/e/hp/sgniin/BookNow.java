@@ -51,12 +51,12 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
     String currentDateString, spinnerText;
 
     String batchSpinner;
-    String getinstitutecourseid, getcourseName, getinstitutename, getinstitutelocation, getcid, institute_id;
+    String getinstitutecourseid, getcourseName, getinstitutename, getinstitutelocation, getcid, institute_id, __institute_slug;
 
-    String[] spinner = {"Select Batch", "Morning", "Afternoon", "Evening"};
+    String[] spinner = {"Morning", "Afternoon", "Evening"};
     String spinnerValue;
     /*variables for json response*/
-    String fees, finalfees, markup, duration, fees_id, admin_profit_markup, admin_profit;
+    String fees, finalfees, markup, duration, fees_id, admin_profit_markup, admin_profit, fee_status;
 
     ListView listView;
 
@@ -69,21 +69,29 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
     public static final String Studentid = "sid";
 
     Dialog myDialog;
-    EditText ed_name, ed_mobile;
+    EditText ed_name, ed_mobile, ed_fatherName;
     String get_dialog_phone, get_dialog_name;
     Button btn_submit, btn_cancel;
 
     String stu_id, stu_phone;
 
+    ProgressDialog coursebookedLoading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_now);
+
+
         sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         stu_id = sharedPreferences.getString(Studentid, "");
         stu_phone = sharedPreferences.getString(Phone, "");
-        //Toast.makeText(this, stu_id+stu_phone, Toast.LENGTH_SHORT).show();
 
+
+        //Toast.makeText(this, stu_id+stu_phone, Toast.LENGTH_SHORT).show();
+        //networking libray intialization
+        AndroidNetworking.initialize(getApplicationContext());
+        //Toast.makeText(this, "" + __instituteId, Toast.LENGTH_SHORT).show();
 
         myDialog = new Dialog(this);
 
@@ -91,6 +99,12 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
         payAtCenter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                if (getFees_id.isEmpty()) {
+                    btn_submit.setEnabled(false);
+                }
+
 
                 sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
                 String value = sharedPreferences.getString(Studentid, "");
@@ -112,8 +126,10 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
 
                 ed_mobile = (EditText) myDialog.findViewById(R.id.ed_phone);
                 ed_name = (EditText) myDialog.findViewById(R.id.ed_name);
+                ed_fatherName = (EditText) myDialog.findViewById(R.id.ed_fatherName);
                 ed_mobile.addTextChangedListener(nameTextWatcher);
                 ed_name.addTextChangedListener(nameTextWatcher);
+                ed_fatherName.addTextChangedListener(nameTextWatcher);
                 ed_mobile.setText(stu_phone);
 
 
@@ -123,42 +139,36 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                         myDialog.dismiss();
                     }
                 });
+
+                /*orderapi*/
                 btn_submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
+                        coursebookedLoading = new ProgressDialog(BookNow.this);
+                        coursebookedLoading.setTitle("Please Wait..");
+                        coursebookedLoading.setMessage("Booking Course .....");
+                        coursebookedLoading.setMax(5);
+                        coursebookedLoading.setCancelable(true);
+                        coursebookedLoading.show();
+
                         String name = ed_name.getText().toString();
                         String mobile = ed_mobile.getText().toString();
-
-                        JSONArray array = new JSONArray();
-                        JSONArray arraybatch = new JSONArray();
-                        array.put(getFees_id);
-                        array.put(getFinalfees);
-                        array.put(getfees);
-                        array.put(getMarkup);
-                        array.put(getDuration);
-                        array.put(getAdmin_profit_markup);
-                        array.put(getAdmin_profit);
-                        arraybatch.put(currentDateString);
-                        arraybatch.put(spinnerText);
-
-                        Toast.makeText(BookNow.this, array.toString(), Toast.LENGTH_SHORT).show();
-                        Log.d("ttttt",array.toString());
-                        //networking libray intialization
-                        AndroidNetworking.initialize(getApplicationContext());
-                        //Toast.makeText(this, "" + __instituteId, Toast.LENGTH_SHORT).show();
+                        String fathername = ed_fatherName.getText().toString();
 
 
                         AndroidNetworking.post("https://sgni.in/api/run_new.php")
 
                                 .addBodyParameter("call", "order")
                                 .addBodyParameter("cid", getcid)
-                                .addBodyParameter("fees", array.toString())
-                                .addBodyParameter("batch", arraybatch.toString())
+                                .addBodyParameter("fees", fees_id + '|' + getFinalfees + '|' + getfees + '|' + getMarkup + '|' + getDuration + '|' + getAdmin_profit_markup + '|' + admin_profit)
+                                .addBodyParameter("batch", currentDateString + '|' + spinnerText)
                                 .addBodyParameter("name", name)
                                 .addBodyParameter("ph", mobile)
+                                .addBodyParameter("fname", fathername)
                                 .addBodyParameter("sid", stu_id)
                                 .addBodyParameter("instid", institute_id)
+                                .addBodyParameter("slug", __institute_slug)
                                 .setTag("test")
                                 .setPriority(Priority.MEDIUM)
                                 .build()
@@ -166,35 +176,57 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                                     @Override
                                     public void onResponse(JSONObject response) {
                                         loading.dismiss();
+                                        coursebookedLoading.dismiss();
+                                        Log.d("response_booked", "" + response);
+                                        try {
+                                            Log.d("responsetostring",response.toString());
+                                            String result = response.getString("data");
 
-                                        if (response != null && response.length() > 0) {
-
-                                            Log.d("response_booked", "" + response);
-                                            try {
-                                                ArrayList<String> res_locid_value = new ArrayList<String>();
-                                                ArrayList<itemModel> arrayList = new ArrayList<>();
-                                                ArrayList<String> course_name = new ArrayList<String>();
-                                                JSONArray contacts = response.getJSONArray("data");
-                                                for (int i = 0; i < contacts.length(); i++) {
-
-
-                                                    JSONObject c = contacts.getJSONObject(i);
-                                                /*    fees = c.getString("fees");
-                                                    finalfees = c.getString("final_fees");
-                                                    markup = c.getString("markup");*/
-                                                }
-
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                            if (result.equals("Invalid User;")) {
+                                                coursebookedLoading.dismiss();
+                                                Toast.makeText(BookNow.this, "Booking Failed", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Intent intent = new Intent(BookNow.this, MainActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);
                                             }
 
+
+                                            JSONArray contacts = response.getJSONArray("data");
+                                            for (int i = 0; i < contacts.length(); i++) {
+                                                JSONObject c = contacts.getJSONObject(i);
+                                            }
+
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            Log.d("Exceptionhai", "+"+ e);
+                                            //Toast.makeText(BookNow.this, "Exception here : " + e, Toast.LENGTH_SHORT).show();
                                         }
+
+
+
                                     }
 
                                     @Override
                                     public void onError(ANError error) {
                                         // handle error
-                                        Log.d("error", "ha ha" + error);
+                                        Log.d("erroraadeyaa", "ha ha" + error);
+                                        if (error.getErrorCode() != 0) {
+                                            // received error from server
+                                            // error.getErrorCode() - the error code from server
+                                            // error.getErrorBody() - the error body from server
+                                            // error.getErrorDetail() - just an error detail
+                                            Log.d("error_code", "onError errorCode : " + error.getErrorCode());
+                                            Log.d("error_body", "onError errorBody : " + error.getErrorBody());
+                                            Log.d("error_detail", "onError errorDetail : " + error.getErrorDetail());
+                                            // get parsed error object (If ApiError is your class)
+                                        } else {
+                                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                            Log.d("error_detail2", "onError errorDetail : " + error.getErrorDetail());
+                                        }
+
+
                                     }
                                 });
                     }
@@ -220,6 +252,7 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
         getinstitutelocation = intent.getStringExtra("intent_inst_location");
         getcid = intent.getStringExtra("cid");
         institute_id = intent.getStringExtra("institute_id");
+        __institute_slug = intent.getStringExtra("__institute_slug");
 
 
         //Toast.makeText(this, getinstitutecourseid, Toast.LENGTH_SHORT).show();
@@ -244,7 +277,7 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
         //Setting the ArrayAdapter data on the Spinner
         spin.setAdapter(aa);
         spinnerValue = spin.getSelectedItem().toString();
-        Toast.makeText(this, spinnerValue, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, spinnerValue, Toast.LENGTH_SHORT).show();
 
 
         calendar_image = (Button) findViewById(R.id.calendar);
@@ -261,7 +294,7 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
         });
 
 
-        /*api is going to hit*/
+        /*api is going to hit show-course-duration*/
         AndroidNetworking.initialize(getApplicationContext());
         AndroidNetworking.post("https://sgni.in/api/run_new.php")
 
@@ -276,7 +309,6 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
 
                         loading.dismiss();
 
-
                         if (response != null && response.length() > 0) {
 
                             Log.d("response_courseduration", "" + response);
@@ -287,6 +319,7 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                                 for (int i = 0; i < contacts.length(); i++) {
 
                                     JSONObject c = contacts.getJSONObject(i);
+
                                     fees = c.getString("fees");
                                     finalfees = c.getString("final_fees");
                                     markup = c.getString("markup");
@@ -294,18 +327,21 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                                     fees_id = c.getString("fees_id");
                                     admin_profit_markup = c.getString("admin_profit_markup");
                                     admin_profit = c.getString("admin_profit");
+                                    fee_status = c.getString("fee_status");
 
+                                    if (fee_status.equals("Y")) {
+                                        itemCourseDurationModel model = new itemCourseDurationModel();
 
-                                    itemCourseDurationModel model = new itemCourseDurationModel();
-
-                                    model.setFees("\u20B9" + fees);
-                                    model.setFees2("\u20B9" + finalfees);
-                                    model.setMarkup(markup + "% off");
-                                    model.setDuration(duration + " Months");
-                                    model.setFeesid(fees_id);
-                                    model.setAdmin_profit_markup(admin_profit_markup);
-                                    model.setAdmin_profit(admin_profit);
-                                    arrayList.add(model);
+                                        model.setFees("\u20B9" + fees);
+                                        model.setFees2("\u20B9" + finalfees);
+                                        model.setMarkup(markup + "% off");
+                                        model.setDuration(duration + " Months");
+                                        model.setFeesid(fees_id);
+                                        model.setAdmin_profit_markup(admin_profit_markup);
+                                        model.setAdmin_profit(admin_profit);
+                                        arrayList.add(model);
+                                        //Toast.makeText(BookNow.this, "Data0000", Toast.LENGTH_SHORT).show();
+                                    }
 
 
                                 }
@@ -367,7 +403,8 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                                         getAdmin_profit = arrayList.get(position).getAdmin_profit();
 
 
-                                        Toast.makeText(BookNow.this, getAdmin_profit_markup, Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(BookNow.this, getAdmin_profit_markup, Toast.LENGTH_SHORT).show();
+
 
                                     }
                                 });
@@ -385,7 +422,7 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                     @Override
                     public void onError(ANError error) {
                         // handle error
-                        Log.d("error", "ha ha" + error);
+                        Log.d("etheyhaierror", "ha ha" + error);
                     }
                 });
 
@@ -402,17 +439,20 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
         currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
         calendar_image.setText(currentDateString);
         Toast.makeText(this, currentDateString, Toast.LENGTH_SHORT).show();
+        if (!currentDateString.isEmpty()) {
+
+            payAtCenter.setEnabled(true);
+        } else {
+            payAtCenter.setEnabled(false);
+            Toast.makeText(this, "Select Date & Course Duration", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-
         batchSpinner = spinner[position];
         spinnerText = parent.getItemAtPosition(position).toString();
-        Toast.makeText(parent.getContext(), spinnerText, Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -424,57 +464,43 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
     private TextWatcher nameTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            if (ed_name.getText().length() < 3) {
+
+/*            if (ed_name.getText().toString().matches("")) {
                 ed_name.setError("Name is Mandatory");
 
             }
+            else {
+                ed_name.setError(null);
+            }*/
 
 
-            if (ed_mobile.getText().length() < 10) {
+            if (ed_mobile.getText().length() < 10 && ed_fatherName.getText().toString().matches("") && ed_name.getText().toString().matches("")) {
                 ed_mobile.setError("Please Enter 10 Digits Number");
-
+                ed_fatherName.setError("Father Name is Mandatory");
+                ed_name.setError("Name is Mandatory");
+                btn_submit.setEnabled(false);
+            } else {
+                ed_fatherName.setError(null);
+                ed_name.setError(null);
             }
-
         }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            get_dialog_name = ed_name.getText().toString();
-            if (get_dialog_name.isEmpty()) {
-                ed_name.setError("Name is Mandatory");
-            }
-
-
-            get_dialog_phone = ed_mobile.getText().toString();
-            if (get_dialog_phone.isEmpty()) {
-                ed_mobile.setError("Please Enter Phone");
-            }
         }
 
         @Override
         public void afterTextChanged(Editable s) {
 
 
-            if (ed_name.getText().length() < 5) {
-                ed_name.setError("Name is Mandatory");
-            }
-
-            if (ed_name.getText().length() <= 5) {
-                ed_name.setError(null);
-            }
-
-
-            if (ed_mobile.getText().length() > 0) {
-                ed_mobile.setError(null);
-            }
-
-
             if (ed_mobile.getText().length() < 10) {
                 ed_mobile.setError("Please Enter 10 Digits Number");
 
             }
-            if (ed_mobile.getText().length() == 10) {
+            if (ed_mobile.getText().length() == 10 ) {
                 ed_mobile.setError(null);
+            }
+            if (!ed_fatherName.getText().toString().isEmpty()) {
                 btn_submit.setEnabled(true);
             }
         }

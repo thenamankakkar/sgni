@@ -23,16 +23,16 @@ public class ListViewCoursesAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<itemModel> arrayList;
-    String __institutename,__instituteaddress,cid,__instituteid;
+    String __institutename,__instituteaddress,cid,__instituteid,__institute_slug;
 
-    public ListViewCoursesAdapter(Context context, ArrayList<itemModel> arrayList, String __instituteaddress, String __institutename,String cid,String __instituteid) {
+    public ListViewCoursesAdapter(Context context, ArrayList<itemModel> arrayList, String __instituteaddress, String __institutename,String cid,String __instituteid,String __institute_slug) {
         this.context = context;
         this.arrayList = arrayList;
         this.__instituteaddress=__instituteaddress;
         this.__institutename=__institutename;
         this.cid=cid;
         this.__instituteid=__instituteid;
-
+        this.__institute_slug=__institute_slug;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class ListViewCoursesAdapter extends BaseAdapter {
                 courseName= arrayList.get(position).getCourseName();
               /*  Toast.makeText(context, __institutename, Toast.LENGTH_SHORT).show();
                 Toast.makeText(context, __instituteaddress, Toast.LENGTH_SHORT).show();*/
-                Toast.makeText(context, __instituteid, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, __instituteid, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(context,BookNow.class);
                 intent.putExtra("institute_course_id",institute_course_id);
@@ -91,6 +91,8 @@ public class ListViewCoursesAdapter extends BaseAdapter {
                 intent.putExtra("intent_inst_location",__instituteaddress);
                 intent.putExtra("cid",cid);
                 intent.putExtra("institute_id",__instituteid);
+                intent.putExtra("__institute_slug",__institute_slug);
+                //Toast.makeText(context, __institute_slug, Toast.LENGTH_SHORT).show();
                 context.startActivity(intent);
 
             }

@@ -39,7 +39,7 @@ import java.util.List;
 
 public class topCourse_Adpater extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterView.OnItemSelectedListener {
 
-    String __instituteId, __courseId, __institutename, __instituteaddress;
+    String __instituteId, __courseId, __institutename, __instituteaddress,__institute_slug;
 
     Dialog myDialog;
 
@@ -95,11 +95,13 @@ CourseData current = data.get(position);
                 __courseId = current.course_id;
                 __institutename = current.fishName;
                 __instituteaddress = current.fishaddress;
+                __institute_slug = current.__institute_slug;
                 Intent intent = new Intent(context, KnowMore.class);
                 intent.putExtra("__instituteId", __instituteId);
                 intent.putExtra("__courseId", __courseId);
                 intent.putExtra("__institutename", __institutename);
                 intent.putExtra("__instituteaddress", __instituteaddress);
+                intent.putExtra("__institute_slug", __institute_slug);
                 context.startActivity(intent);
             }
         });
@@ -213,24 +215,30 @@ CourseData current = data.get(position);
 
 
         /*know more button code*/
-/*        myHolder.btn_know_more.setOnClickListener(new View.OnClickListener() {
+        myHolder.btn_know_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             *//*   Intent intent = new Intent(context,KnowMore.class);
-                context.startActivity(intent);*//*
+             /*   Intent intent = new Intent(context,KnowMore.class);
+                context.startActivity(intent);*/
 
-                com.e.hp.sgniin.CourseData current = data.get(position);
+                CourseData current = data.get(position);
                 __instituteId = current.institute_id;
                 __courseId = current.course_id;
+                __institutename = current.fishName;
+                __instituteaddress = current.fishaddress;
+                __institute_slug = current.__institute_slug;
                 Intent intent = new Intent(context, KnowMore.class);
                 intent.putExtra("__instituteId", __instituteId);
                 intent.putExtra("__courseId", __courseId);
+                intent.putExtra("__institutename", __institutename);
+                intent.putExtra("__instituteaddress", __instituteaddress);
+                intent.putExtra("__institute_slug", __institute_slug);
                 context.startActivity(intent);
 
 
                 Log.d("testdata", __instituteId + " testdata2 " + __courseId);
             }
-        });*/
+        });
 
 
     }

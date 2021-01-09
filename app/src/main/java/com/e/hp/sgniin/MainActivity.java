@@ -82,76 +82,6 @@ public class MainActivity extends AppCompatActivity
     String user_phone_no, student_id, intent_scode, student_otp, user_vkey;
 
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        /*----------------------------------Top Institutes Recycler View Code Start---------------------------------------------------------*/
-        //networking libray intialization
-        AndroidNetworking.initialize(getApplicationContext());
-        AndroidNetworking.post("https://sgni.in/api/run_new.php")
-
-                .addBodyParameter("call", "topinstitutes")
-                .setTag("test")
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        topcourse_loading.dismiss();
-
-                        if (response != null && response.length() > 0) {
-
-                            List<CourseData> data = new ArrayList<>();
-
-
-                            Log.d("response_course", "" + response);
-                            try {
-
-                                JSONArray contacts = response.getJSONArray("data");
-                                for (int i = 0; i < contacts.length(); i++) {
-
-                                    CourseData fishData = new CourseData();
-
-                                    JSONObject c = contacts.getJSONObject(i);
-                                    fishData.fishName = c.getString("name");
-                                    fishData.fishaddress = c.getString("address");
-                                    fishData.fishviews = c.getString("Views");
-                                    fishData.inst_name = c.getString("name");
-                                    fishData.institute_id = c.getString("inst_id");
-                                    fishData.course_id = c.getString("inst_cid");
-
-                                    data.add(fishData);
-
-                                }
-
-
-                                /*recycler view code*/
-                                topcourse_recyclerView = findViewById(R.id.my_recycler2);
-                                mAdapter = new topCourse_Adpater(MainActivity.this, data);
-
-                                //CourseViewAdapter courseViewAdapter = new CourseViewAdapter(data);
-                                topcourse_recyclerView.setAdapter(mAdapter);
-                                topcourse_recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                        Log.d("error", "ha ha" + error);
-                    }
-                });
-    }
-
     RecyclerView topcourse_recyclerView;
 
     private topCourse_Adpater mAdapter;
@@ -168,11 +98,7 @@ public class MainActivity extends AppCompatActivity
 
         sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         String value = sharedPreferences.getString(Studentid,"");
-        Toast.makeText(this, value, Toast.LENGTH_SHORT).show();
-
-
-
-
+        //Toast.makeText(this, value, Toast.LENGTH_SHORT).show();
 
         //progress dialog
         topcourse_loading = new ProgressDialog(this);
@@ -222,6 +148,74 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
+        /*----------------------------------Top Institutes Recycler View Code Start---------------------------------------------------------*/
+        //networking libray intialization
+        AndroidNetworking.initialize(getApplicationContext());
+        AndroidNetworking.post("https://sgni.in/api/run_new.php")
+
+                .addBodyParameter("call", "topinstitutes")
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        topcourse_loading.dismiss();
+
+                        if (response != null && response.length() > 0) {
+
+                            List<CourseData> data = new ArrayList<>();
+
+
+                            Log.d("response_course", "" + response);
+                            try {
+
+                                JSONArray contacts = response.getJSONArray("data");
+                                for (int i = 0; i < contacts.length(); i++) {
+
+                                    CourseData fishData = new CourseData();
+
+                                    JSONObject c = contacts.getJSONObject(i);
+                                    fishData.fishName = c.getString("name");
+                                    fishData.fishaddress = c.getString("address");
+                                    fishData.fishviews = c.getString("Views");
+                                    fishData.inst_name = c.getString("name");
+                                    fishData.institute_id = c.getString("inst_id");
+                                    fishData.course_id = c.getString("inst_cid");
+                                    fishData.__institute_slug= c.getString("inst_slug");
+
+                                    data.add(fishData);
+
+                                }
+
+
+                                /*recycler view code*/
+                                topcourse_recyclerView = findViewById(R.id.my_recycler2);
+                                mAdapter = new topCourse_Adpater(MainActivity.this, data);
+
+                                //CourseViewAdapter courseViewAdapter = new CourseViewAdapter(data);
+                                topcourse_recyclerView.setAdapter(mAdapter);
+                                topcourse_recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.d("error", "ha ha" + error);
+                    }
+                });
 
 
 

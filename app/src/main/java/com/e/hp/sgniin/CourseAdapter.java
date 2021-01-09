@@ -49,7 +49,8 @@ import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterView.OnItemSelectedListener {
 
-    String __instituteId, __courseId, __institutename, __instituteaddress;
+    String __instituteId, __courseId, __institutename, __instituteaddress,__institute_slug;
+
 
     Dialog myDialog;
 
@@ -75,6 +76,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.data = data;
+
     }
 
     // Inflate the layout when viewholder created
@@ -227,11 +229,13 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 __courseId = current.course_id;
                 __institutename = current.fishName;
                 __instituteaddress = current.fishaddress;
+                __institute_slug = current.__institute_slug;
                 Intent intent = new Intent(context, KnowMore.class);
                 intent.putExtra("__instituteId", __instituteId);
                 intent.putExtra("__courseId", __courseId);
                 intent.putExtra("__institutename", __institutename);
                 intent.putExtra("__instituteaddress", __instituteaddress);
+                intent.putExtra("__institute_slug", __institute_slug);
                 context.startActivity(intent);
 
 

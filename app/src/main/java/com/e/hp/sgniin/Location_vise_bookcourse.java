@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,11 +30,21 @@ public class Location_vise_bookcourse extends AppCompatActivity {
 
     private CourseAdapter mAdapter;
 
+    String __institute_slug;
+    ProgressDialog institute_loading;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_vise_bookcourse);
+
+        institute_loading = new ProgressDialog(Location_vise_bookcourse.this);
+        institute_loading.setTitle("Please Wait..");
+        institute_loading.setMessage("Institutes Loading .....");
+        institute_loading.setMax(5);
+        institute_loading.setCancelable(false);
+        institute_loading.show();
 
 
         Intent intent = getIntent();
@@ -53,23 +64,18 @@ public class Location_vise_bookcourse extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-
-                        if (response != null && response.length() > 0) {
-
+                        institute_loading.dismiss();
                             List<CourseData> data = new ArrayList<>();
-
-
                             Log.d("response_course", "" + response);
                             try {
-
+                                String empty_response = response.getString("data");
+                                if (empty_response.equals("[]"))
+                                {
+                                    Toast.makeText(Location_vise_bookcourse.this, "No Data Found !", Toast.LENGTH_SHORT).show();
+                                }
                                 JSONArray contacts = response.getJSONArray("data");
                                 for (int i = 0; i < contacts.length(); i++) {
-
-                                    if (contacts.isNull(0)) {
-                                        Toast.makeText(Location_vise_bookcourse.this, "response is null", Toast.LENGTH_SHORT).show();
-                                    }
                                     CourseData fishData = new CourseData();
-
                                     JSONObject c = contacts.getJSONObject(i);
                                     fishData.fishName = c.getString("name");
                                     fishData.fishaddress = c.getString("address");
@@ -77,7 +83,7 @@ public class Location_vise_bookcourse extends AppCompatActivity {
                                     fishData.inst_name = c.getString("name");
                                     fishData.institute_id = c.getString("inst_id");
                                     fishData.course_id = c.getString("inst_cid");
-
+                                    fishData.__institute_slug= c.getString("inst_slug");
                                     data.add(fishData);
 
 
@@ -102,7 +108,7 @@ public class Location_vise_bookcourse extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        }
+
 
 
                     }

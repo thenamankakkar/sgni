@@ -5,6 +5,7 @@ public class CourseData {
     public String fishaddress;
     public String fishviews;
     public String inst_name;
+    public String __institute_slug;
 
 
     public String institute_id;

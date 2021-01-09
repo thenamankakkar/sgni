@@ -42,11 +42,10 @@ public class KnowMore extends AppCompatActivity {
     /*variables for json response*/
     String fees, finalfees, markup, course_id, cid,coursename;
 
-   public String __instituteId, __courseId,__institutename,__instituteaddress;
+   public String __instituteId, __courseId,__institutename,__instituteaddress,__institute_slug;
     ArrayList<itemModel> arrayList;
     ListView listView;
 
-    String pakkawalainstitutename;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +70,7 @@ public class KnowMore extends AppCompatActivity {
         __courseId = intent.getStringExtra("__courseId");
         __institutename = intent.getStringExtra("__institutename");
         __instituteaddress = intent.getStringExtra("__instituteaddress");
+        __institute_slug = intent.getStringExtra("__institute_slug");
         instituteName.setText(__institutename);
         institueAddress.setText(__instituteaddress);
 
@@ -110,7 +110,6 @@ public class KnowMore extends AppCompatActivity {
                                 JSONArray contacts = response.getJSONArray("data");
                                 for (int i = 0; i < contacts.length(); i++) {
 
-
                                     JSONObject c = contacts.getJSONObject(i);
                                     fees = c.getString("fees");
                                     finalfees = c.getString("final_fees");
@@ -121,31 +120,17 @@ public class KnowMore extends AppCompatActivity {
                                     cid = c.getString("cid");
 
 
-
                                     itemModel model = new itemModel();
-
                                     model.setCourseName(coursename);
                                     model.setFees(fees);
                                     model.setinst_cid(course_id);
                                     model.setFees2("\u20B9"+finalfees);
                                     arrayList.add(model);
 
-
-
-                                 /*   __courseIdInItem.add(fees);
-                                    res_locid_value.add(course_id);
-                                    course_name.add(course_id);
-                                    Log.d("res_slug", "" + res_slug);
-*/
                                 }
-                                ListViewCoursesAdapter adapter = new ListViewCoursesAdapter(KnowMore.this, arrayList,__instituteaddress,__institutename,cid,__instituteId);
+                                ListViewCoursesAdapter adapter = new ListViewCoursesAdapter(KnowMore.this, arrayList,__instituteaddress,__institutename,cid,__instituteId,__institute_slug);
                                 listView.setAdapter(adapter);
 
-
-
-/*                                adapter = new ArrayAdapter<String>(KnowMore.this, R.layout.course_info, res_locid_value);
-                                android.widget.ListView list = (android.widget.ListView) findViewById(R.id.courseListView);
-                                list.setAdapter(adapter);*/
                                 listView.setTextFilterEnabled(true);
                                 listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -153,7 +138,6 @@ public class KnowMore extends AppCompatActivity {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view,
                                                             int position, long id) {
-
                                         Toast.makeText(KnowMore.this, "Item Clicked", Toast.LENGTH_SHORT).show();
 
                                     }
@@ -162,16 +146,7 @@ public class KnowMore extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-
-
-
-
-
-
-
                         }
-
                     }
 
                     @Override
@@ -180,7 +155,5 @@ public class KnowMore extends AppCompatActivity {
                         Log.d("error", "ha ha" + error);
                     }
                 });
-
-
     }
 }
