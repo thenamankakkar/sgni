@@ -89,8 +89,7 @@ public class SearchActivity extends AppCompatActivity {
                                     data.add(fishData);
 
                                 }
-
-
+                                
                                 /*recycler view code*/
                                 recyclerView = findViewById(R.id.recyclerView);
                                 mAdapter = new CourseAdapter(SearchActivity.this, data);
