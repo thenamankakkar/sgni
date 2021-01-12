@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".KnowMore"></activity>
+        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".KnowMore" />
         <activity android:name=".BookNow" />
         <activity android:name=".Location_vise_bookcourse" />
         <activity android:name=".Location_List" />

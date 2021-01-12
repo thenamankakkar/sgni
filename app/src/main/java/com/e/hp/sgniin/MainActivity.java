@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -27,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -35,7 +37,10 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.e.hp.sgniin.HelperClasses.adapterphone;
 import com.e.hp.sgniin.HelperClasses.phonehelper;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.treebo.internetavailabilitychecker.InternetAvailabilityChecker;
 import com.treebo.internetavailabilitychecker.InternetConnectivityListener;
 
@@ -43,14 +48,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.widget.SearchView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, InternetConnectivityListener, adapterphone.ListItemClickListener{
-
-
-
+        implements NavigationView.OnNavigationItemSelectedListener, InternetConnectivityListener, adapterphone.ListItemClickListener {
 
 
     SharedPreferences sharedPreferences;
@@ -58,8 +62,6 @@ public class MainActivity extends AppCompatActivity
     RecyclerView phoneRecycler;
 
     RecyclerView.Adapter adapter;
-
-
 
 
     private InternetAvailabilityChecker mInternetAvailabilityChecker;
@@ -88,16 +90,46 @@ public class MainActivity extends AppCompatActivity
 
     ProgressDialog topcourse_loading;
 
+    SearchView searchView;
+    String searchText;
 
 
     public static final String mypreference = "mypref";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        searchView = (SearchView) findViewById(R.id.ed_find);
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                if (searchText.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please Enter the Search Field", Toast.LENGTH_SHORT).show();
+                }
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                intent.putExtra("searchedText",searchText);
+                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //    adapter.getFilter().filter(newText);
+                searchText = newText;
+                return false;
+
+
+            }
+        });
+
         sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        String value = sharedPreferences.getString(Studentid,"");
+        String value = sharedPreferences.getString(Studentid, "");
         //Toast.makeText(this, value, Toast.LENGTH_SHORT).show();
 
         //progress dialog
@@ -119,12 +151,9 @@ public class MainActivity extends AppCompatActivity
         user_vkey = getIntent().getExtras().getString("user_vkey");*/
 
 
-
         //Hooks
         phoneRecycler = findViewById(R.id.my_recycler);
         phoneRecycler();
-
-
 
 
         //custom progress instance
@@ -186,7 +215,7 @@ public class MainActivity extends AppCompatActivity
                                     fishData.inst_name = c.getString("name");
                                     fishData.institute_id = c.getString("inst_id");
                                     fishData.course_id = c.getString("inst_cid");
-                                    fishData.__institute_slug= c.getString("inst_slug");
+                                    fishData.__institute_slug = c.getString("inst_slug");
 
                                     data.add(fishData);
 
@@ -288,9 +317,7 @@ public class MainActivity extends AppCompatActivity
                 });
 
 
-
     }
-
 
 
     /*recycler view code*/
@@ -332,57 +359,57 @@ public class MainActivity extends AppCompatActivity
         switch (clickedItemIndex) {
             case 0: //first item in Recycler view
                 mIntent = new Intent(MainActivity.this, Location_List.class);
-                mIntent.putExtra("res_parent","6");
+                mIntent.putExtra("res_parent", "6");
                 startActivity(mIntent);
                 break;
             case 1: //second item in Recycler view
                 mIntent = new Intent(MainActivity.this, Location_List.class);
-                mIntent.putExtra("res_parent","32");
+                mIntent.putExtra("res_parent", "32");
                 startActivity(mIntent);
                 break;
             case 2: //third item in Recycler view
                 mIntent = new Intent(MainActivity.this, Location_List.class);
-                mIntent.putExtra("res_parent","34");
+                mIntent.putExtra("res_parent", "34");
                 startActivity(mIntent);
                 break;
             case 3: //fourth item in Recycler view
                 mIntent = new Intent(MainActivity.this, Location_List.class);
-                mIntent.putExtra("res_parent","35");
+                mIntent.putExtra("res_parent", "35");
                 startActivity(mIntent);
                 break;
             case 4: //fifth item in Recycler view
                 mIntent = new Intent(MainActivity.this, Location_List.class);
-                mIntent.putExtra("res_parent","37");
+                mIntent.putExtra("res_parent", "37");
                 startActivity(mIntent);
                 break;
             case 5: //sixth item in Recycler view
                 mIntent = new Intent(MainActivity.this, Location_List.class);
-                mIntent.putExtra("res_parent","350");
+                mIntent.putExtra("res_parent", "350");
                 startActivity(mIntent);
                 break;
             case 6: //seventh item in Recycler view
                 mIntent = new Intent(MainActivity.this, Location_List.class);
-                mIntent.putExtra("res_parent","39");
+                mIntent.putExtra("res_parent", "39");
                 startActivity(mIntent);
                 break;
             case 7: //eighth item in Recycler view
                 mIntent = new Intent(MainActivity.this, Location_List.class);
-                mIntent.putExtra("res_parent","40");
+                mIntent.putExtra("res_parent", "40");
                 startActivity(mIntent);
                 break;
             case 8: //nineth item in Recycler view
                 mIntent = new Intent(MainActivity.this, Location_List.class);
-                mIntent.putExtra("res_parent","41");
+                mIntent.putExtra("res_parent", "41");
                 startActivity(mIntent);
                 break;
             case 9: //tenth item in Recycler view
                 mIntent = new Intent(MainActivity.this, Location_List.class);
-                mIntent.putExtra("res_parent","42");
+                mIntent.putExtra("res_parent", "42");
                 startActivity(mIntent);
                 break;
             case 10: //eleventh item in Recycler view
                 mIntent = new Intent(MainActivity.this, Location_List.class);
-                mIntent.putExtra("res_parent","43");
+                mIntent.putExtra("res_parent", "43");
                 startActivity(mIntent);
                 break;
 
@@ -468,11 +495,9 @@ public class MainActivity extends AppCompatActivity
             editor.commit();
 
 
-            Intent intent = new Intent(MainActivity.this,OTP_register.class);
+            Intent intent = new Intent(MainActivity.this, OTP_register.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-
-
 
 
         }

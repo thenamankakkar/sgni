@@ -1,5 +1,6 @@
 package com.e.hp.sgniin;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
@@ -8,6 +9,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -81,6 +83,16 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_now);
+        Intent intent = getIntent();
+        getinstitutecourseid = intent.getStringExtra("institute_course_id");
+        getcourseName = intent.getStringExtra("courseName");
+        getinstitutename = intent.getStringExtra("intent_inst_name");
+        getinstitutelocation = intent.getStringExtra("intent_inst_location");
+        getcid = intent.getStringExtra("cid");
+        institute_id = intent.getStringExtra("institute_id");
+        __institute_slug = intent.getStringExtra("__institute_slug");
+
+        Toast.makeText(this, getinstitutecourseid, Toast.LENGTH_SHORT).show();
 
 
         sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
@@ -99,16 +111,10 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
         payAtCenter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                Toast.makeText(BookNow.this, getDuration + getFinalfees, Toast.LENGTH_SHORT).show();
                 if (getFees_id.isEmpty()) {
                     btn_submit.setEnabled(false);
                 }
-
-
-                sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-                String value = sharedPreferences.getString(Studentid, "");
-                Toast.makeText(BookNow.this, value, Toast.LENGTH_SHORT).show();
 
 
                 myDialog.setContentView(R.layout.booknow_alert);
@@ -140,10 +146,13 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                     }
                 });
 
-                /*orderapi*/
+
                 btn_submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        Log.d("submit_feasible", getFees_id + "" + getFinalfees + "" + getfees + "" + getMarkup + "" + getDuration + "" + getAdmin_profit_markup + "" + getAdmin_profit);
+
 
                         coursebookedLoading = new ProgressDialog(BookNow.this);
                         coursebookedLoading.setTitle("Please Wait..");
@@ -160,8 +169,8 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                         AndroidNetworking.post("https://sgni.in/api/run_new.php")
 
                                 .addBodyParameter("call", "order")
-                                .addBodyParameter("cid", getcid)
-                                .addBodyParameter("fees", fees_id + '|' + getFinalfees + '|' + getfees + '|' + getMarkup + '|' + getDuration + '|' + getAdmin_profit_markup + '|' + admin_profit)
+                                .addBodyParameter("cid", getinstitutecourseid)
+                                .addBodyParameter("fees", getFees_id)
                                 .addBodyParameter("batch", currentDateString + '|' + spinnerText)
                                 .addBodyParameter("name", name)
                                 .addBodyParameter("ph", mobile)
@@ -179,32 +188,36 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                                         coursebookedLoading.dismiss();
                                         Log.d("response_booked", "" + response);
                                         try {
-                                            Log.d("responsetostring",response.toString());
                                             String result = response.getString("data");
 
                                             if (result.equals("Invalid User;")) {
                                                 coursebookedLoading.dismiss();
                                                 Toast.makeText(BookNow.this, "Booking Failed", Toast.LENGTH_SHORT).show();
                                             } else {
-                                                Intent intent = new Intent(BookNow.this, MainActivity.class);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);
+
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(
+                                                        BookNow.this);
+                                                builder.setTitle("Course has been BOOKED");
+                                                builder.setMessage("Team will contact you shortly");
+                                                builder.setCancelable(false);
+                                                builder.setPositiveButton("OK",
+                                                        new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog,
+                                                                                int which) {
+                                                                Intent intent = new Intent(BookNow.this, MainActivity.class);
+                                                                intent.putExtra("booked","booked");
+                                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                startActivity(intent);
+                                                            }
+                                                        });
+                                                builder.show();
+
+
                                             }
 
-
-                                            JSONArray contacts = response.getJSONArray("data");
-                                            for (int i = 0; i < contacts.length(); i++) {
-                                                JSONObject c = contacts.getJSONObject(i);
-                                            }
-
-
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                            Log.d("Exceptionhai", "+"+ e);
-                                            //Toast.makeText(BookNow.this, "Exception here : " + e, Toast.LENGTH_SHORT).show();
+                                        } catch (JSONException jsonException) {
+                                            jsonException.printStackTrace();
                                         }
-
-
 
                                     }
 
@@ -234,7 +247,6 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
             }
         });
 
-
         //progress dialog
         loading = new ProgressDialog(this);
         loading.setTitle("Please Wait..");
@@ -244,15 +256,6 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
         loading.show();
 
         listView = (ListView) findViewById(R.id.durationListView);
-
-        Intent intent = getIntent();
-        getinstitutecourseid = intent.getStringExtra("institute_course_id");
-        getcourseName = intent.getStringExtra("courseName");
-        getinstitutename = intent.getStringExtra("intent_inst_name");
-        getinstitutelocation = intent.getStringExtra("intent_inst_location");
-        getcid = intent.getStringExtra("cid");
-        institute_id = intent.getStringExtra("institute_id");
-        __institute_slug = intent.getStringExtra("__institute_slug");
 
 
         //Toast.makeText(this, getinstitutecourseid, Toast.LENGTH_SHORT).show();
@@ -309,113 +312,112 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
 
                         loading.dismiss();
 
-                        if (response != null && response.length() > 0) {
 
-                            Log.d("response_courseduration", "" + response);
-                            try {
-                                ArrayList<itemCourseDurationModel> arrayList = new ArrayList<>();
+                        Log.d("response_courseduration", "" + response);
+                        try {
+                            ArrayList<itemCourseDurationModel> arrayList = new ArrayList<>();
 
-                                JSONArray contacts = response.getJSONArray("data");
-                                for (int i = 0; i < contacts.length(); i++) {
+                            JSONArray contacts = response.getJSONArray("data");
+                            for (int i = 0; i < contacts.length(); i++) {
 
-                                    JSONObject c = contacts.getJSONObject(i);
+                                JSONObject c = contacts.getJSONObject(i);
 
-                                    fees = c.getString("fees");
-                                    finalfees = c.getString("final_fees");
-                                    markup = c.getString("markup");
-                                    duration = c.getString("duration");
-                                    fees_id = c.getString("fees_id");
-                                    admin_profit_markup = c.getString("admin_profit_markup");
-                                    admin_profit = c.getString("admin_profit");
-                                    fee_status = c.getString("fee_status");
-
-                                    if (fee_status.equals("Y")) {
-                                        itemCourseDurationModel model = new itemCourseDurationModel();
-
-                                        model.setFees("\u20B9" + fees);
-                                        model.setFees2("\u20B9" + finalfees);
-                                        model.setMarkup(markup + "% off");
-                                        model.setDuration(duration + " Months");
-                                        model.setFeesid(fees_id);
-                                        model.setAdmin_profit_markup(admin_profit_markup);
-                                        model.setAdmin_profit(admin_profit);
-                                        arrayList.add(model);
-                                        //Toast.makeText(BookNow.this, "Data0000", Toast.LENGTH_SHORT).show();
-                                    }
-
-
+                                fees = c.getString("fees");
+                                finalfees = c.getString("final_fees");
+                                markup = c.getString("markup");
+                                duration = c.getString("duration");
+                                fees_id = c.getString("fees_id");
+                                admin_profit_markup = c.getString("admin_profit_markup");
+                                admin_profit = c.getString("admin_profit");
+                                fee_status = c.getString("fee_status");
+                                if (fee_status.equals("Y")) {
+                                    itemCourseDurationModel model = new itemCourseDurationModel();
+                                    model.setFees("\u20B9" + fees);
+                                    model.setFees2("\u20B9" + finalfees);
+                                    model.setMarkup(markup + "% off");
+                                    model.setDuration(duration + " Months");
+                                    model.setFeesid(fees_id);
+                                    model.setAdmin_profit_markup(admin_profit_markup);
+                                    model.setAdmin_profit(admin_profit);
+                                    arrayList.add(model);
+                                    //Toast.makeText(BookNow.this, "Data0000", Toast.LENGTH_SHORT).show();
                                 }
 
 
-                                ListViewCourseDuration adapter = new ListViewCourseDuration(BookNow.this, arrayList);
-                                listView.setAdapter(adapter);
+                            }
+
+                            //Toast.makeText(BookNow.this, "Data0000", Toast.LENGTH_SHORT).show();
+                            ListViewCourseDuration adapter = new ListViewCourseDuration(BookNow.this, arrayList);
+                            listView.setAdapter(adapter);
 
 
 
 /*                                adapter = new ArrayAdapter<String>(KnowMore.this, R.layout.course_info, res_locid_value);
                                 android.widget.ListView list = (android.widget.ListView) findViewById(R.id.courseListView);
                                 list.setAdapter(adapter);*/
-                                listView.setTextFilterEnabled(true);
-                                listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+                            listView.setTextFilterEnabled(true);
+                            listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
 
 
-                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view,
-                                                            int position, long id) {
-
-                                        itemCourseDurationModel model = new itemCourseDurationModel();
-
-                                        TextView tv = (TextView) view.findViewById(R.id.duration);
-                                        TextView tv2 = (TextView) view.findViewById(R.id.fees2);
-                                        TextView tv3 = (TextView) view.findViewById(R.id.fees);
-                                        TextView tv4 = (TextView) view.findViewById(R.id.markup);
-
-                                        CardView cardView = (CardView) findViewById(R.id.fd_card);
-                                        cardView.setVisibility(View.VISIBLE);
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view,
+                                                        int position, long id) {
+                                    getFees_id = arrayList.get(position).getFeesid();
+                                    getfees = arrayList.get(position).getFees();
+                                    getFinalfees = arrayList.get(position).getFees2();
+                                    getMarkup = arrayList.get(position).getMarkup();
+                                    getDuration = arrayList.get(position).getDuration();
+                                    getAdmin_profit_markup = arrayList.get(position).getAdmin_profit_markup();
+                                    getAdmin_profit = arrayList.get(position).getAdmin_profit();
 
 
+                                    itemCourseDurationModel model = new itemCourseDurationModel();
 
-                                        /*Fee Details Text View*/
-                                        TextView fd_discountFees = (TextView) findViewById(R.id.fd_discountFees);
-                                        fd_discountFees.setText(tv3.getText().toString() + "/-");
-                                        fd_discountFees.setPaintFlags(fd_discountFees.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                    TextView tv = (TextView) view.findViewById(R.id.duration);
+                                    TextView tv2 = (TextView) view.findViewById(R.id.fees2);
+                                    TextView tv3 = (TextView) view.findViewById(R.id.fees);
+                                    TextView tv4 = (TextView) view.findViewById(R.id.markup);
 
-
-                                        TextView fd_dicountoff = (TextView) findViewById(R.id.fd_dicountoff);
-                                        fd_dicountoff.setText(tv4.getText().toString());
-
-                                        TextView fd_courseName = (TextView) findViewById(R.id.fd_courseName);
-                                        fd_courseName.setText(getcourseName);
-
-                                        TextView fd_courseCost = (TextView) findViewById(R.id.fd_courseCost);
-                                        fd_courseCost.setText(tv2.getText().toString() + "/-INR");
+                                    CardView cardView = (CardView) findViewById(R.id.fd_card);
+                                    cardView.setVisibility(View.VISIBLE);
 
 
-                                        //Toast.makeText(BookNow.this, tv.getText().toString() + " Selected", Toast.LENGTH_SHORT).show();
-                                        getFees_id = arrayList.get(position).getFeesid();
-                                        getfees = arrayList.get(position).getFees();
-                                        getFinalfees = arrayList.get(position).getFees2();
-                                        getMarkup = arrayList.get(position).getMarkup();
-                                        getDuration = arrayList.get(position).getDuration();
-                                        getAdmin_profit_markup = arrayList.get(position).getAdmin_profit_markup();
-                                        getAdmin_profit = arrayList.get(position).getAdmin_profit();
+
+                                    /*Fee Details Text View*/
+                                    TextView fd_discountFees = (TextView) findViewById(R.id.fd_discountFees);
+                                    fd_discountFees.setText(getfees + "/-");
+                                    fd_discountFees.setPaintFlags(fd_discountFees.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
 
-                                        //Toast.makeText(BookNow.this, getAdmin_profit_markup, Toast.LENGTH_SHORT).show();
+                                    TextView fd_dicountoff = (TextView) findViewById(R.id.fd_dicountoff);
+                                    fd_dicountoff.setText(tv4.getText().toString());
+
+                                    TextView fd_courseName = (TextView) findViewById(R.id.fd_courseName);
+                                    fd_courseName.setText(getcourseName);
+
+                                    TextView fd_courseCost = (TextView) findViewById(R.id.fd_courseCost);
+                                    fd_courseCost.setText(getFinalfees + "/-INR");
 
 
-                                    }
-                                });
+                                    //Toast.makeText(BookNow.this, tv.getText().toString() + " Selected", Toast.LENGTH_SHORT).show();
 
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                                    Log.d("feasible", getFees_id + "" + getFinalfees + "" + getfees + "" + getMarkup + "" + getDuration + "" + getAdmin_profit_markup + "" + getAdmin_profit);
 
 
+                                    //Toast.makeText(BookNow.this, getAdmin_profit_markup, Toast.LENGTH_SHORT).show();
+
+
+                                }
+                            });
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
 
                     }
 
@@ -497,7 +499,7 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                 ed_mobile.setError("Please Enter 10 Digits Number");
 
             }
-            if (ed_mobile.getText().length() == 10 ) {
+            if (ed_mobile.getText().length() == 10) {
                 ed_mobile.setError(null);
             }
             if (!ed_fatherName.getText().toString().isEmpty()) {

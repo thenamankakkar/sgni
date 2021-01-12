@@ -128,7 +128,7 @@ public class KnowMore extends AppCompatActivity {
                                     arrayList.add(model);
 
                                 }
-                                ListViewCoursesAdapter adapter = new ListViewCoursesAdapter(KnowMore.this, arrayList,__instituteaddress,__institutename,cid,__instituteId,__institute_slug);
+                                ListViewCoursesAdapter adapter = new ListViewCoursesAdapter(KnowMore.this, arrayList,__instituteaddress,__institutename,course_id,__instituteId,__institute_slug);
                                 listView.setAdapter(adapter);
 
                                 listView.setTextFilterEnabled(true);
