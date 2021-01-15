@@ -1,5 +1,6 @@
 package com.e.hp.sgniin;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -96,15 +97,40 @@ public class MainActivity extends AppCompatActivity
 
     public static final String mypreference = "mypref";
 
+    BottomNavigationView navigation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
+/*bottom-navigation-start*/
+        navigation = findViewById(R.id.bottom_navigation);
+        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        Intent a = new Intent(getApplicationContext(),MainActivity.class);
+                        startActivity(a);
+                        break;
+                    case R.id.navigation_booking:
+                        Intent b = new Intent(getApplicationContext(),Bookings.class);
+                        startActivity(b);
+                        break;
+                    case R.id.navigation_wallet:
+                        Intent c = new Intent(getApplicationContext(),Wallet.class);
+                        startActivity(c);
+
+                        break;
+                }
+                return false;
+            }
+        });
+        /*bottom-navigation-ends*/
+
         searchView = (SearchView) findViewById(R.id.ed_find);
-
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
