@@ -5,6 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".BookNow">
+<!--    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">-->
+
+
 
 
     <LinearLayout
@@ -18,6 +23,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.021">
+
+
+
+
 
 
         <TextView
@@ -274,12 +283,65 @@
                                 android:textSize="15sp" />
 
                         </LinearLayout>
-
                     </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                app:cardCornerRadius="20dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+
+
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Wallet Balace"
+                    android:onClick="itemClicked"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/walletbalance"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/lite_discount_background"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="15sp"
+                        android:text="Wallet Balance" />
+
+
+                    <TextView
+                        android:gravity="right"
+                        android:id="@+id/addbalace"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="ffffffff"
+                        android:layout_marginRight="15dp"
+                        android:textSize="15sp"/>
+                </LinearLayout>
+
+
 
 
                 </LinearLayout>
-
 
             </androidx.cardview.widget.CardView>
 
@@ -289,7 +351,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/save_upto_corner"
                 android:fontFamily="sans-serif-condensed-medium"
@@ -299,8 +361,7 @@
 
         </LinearLayout>
 
-
     </LinearLayout>
-
+<!--    </ScrollView>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

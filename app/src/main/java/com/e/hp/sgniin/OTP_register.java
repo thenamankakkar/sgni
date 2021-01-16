@@ -133,6 +133,7 @@ public class OTP_register extends AppCompatActivity
     public static final String mypreference = "mypref";
     public static final String Phone = "nameKey";
     public static final String Studentid = "sid";
+    public static final String Scode = "scode";
     String registeredno;
 
     @Override
@@ -304,6 +305,7 @@ public class OTP_register extends AppCompatActivity
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(Phone, getPhone);
                     editor.putString(Studentid,studentid );
+                    editor.putString(Scode,scode );
                     editor.apply();
                     editor.commit();
 

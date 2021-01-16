@@ -25,9 +25,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -77,12 +79,21 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
 
     String stu_id, stu_phone;
 
-    ProgressDialog coursebookedLoading;
+    ProgressDialog coursebookedLoading, walletbalanceloading;
+
+    CheckBox bal;
+
+    String WalletBalance;
+    LinearLayout balLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_now);
+        balLayout = (LinearLayout) this.findViewById(R.id.walletbalance);
+        bal = (CheckBox) findViewById(R.id.checkBox);
+
+
         Intent intent = getIntent();
         getinstitutecourseid = intent.getStringExtra("institute_course_id");
         getcourseName = intent.getStringExtra("courseName");
@@ -178,6 +189,7 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                                 .addBodyParameter("sid", stu_id)
                                 .addBodyParameter("instid", institute_id)
                                 .addBodyParameter("slug", __institute_slug)
+                                .addBodyParameter("wb", WalletBalance)
                                 .setTag("test")
                                 .setPriority(Priority.MEDIUM)
                                 .build()
@@ -205,7 +217,7 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                                                             public void onClick(DialogInterface dialog,
                                                                                 int which) {
                                                                 Intent intent = new Intent(BookNow.this, MainActivity.class);
-                                                                intent.putExtra("booked","booked");
+                                                                intent.putExtra("booked", "booked");
                                                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                                 startActivity(intent);
                                                             }
@@ -429,6 +441,67 @@ public class BookNow extends AppCompatActivity implements DatePickerDialog.OnDat
                 });
 
 
+    }
+
+
+    public void itemClicked(View v) {
+        //code to check if this checkbox is checked!
+        if (bal.isChecked()) {
+            Toast.makeText(this, "Ticked", Toast.LENGTH_SHORT).show();
+            //networking libray intialization
+            AndroidNetworking.initialize(getApplicationContext());
+
+            //progress dialog
+            walletbalanceloading = new ProgressDialog(this);
+            walletbalanceloading.setTitle("Please Wait..");
+            walletbalanceloading.setMessage("Wallet Balance Loading .....");
+            walletbalanceloading.setMax(5);
+            walletbalanceloading.setCancelable(false);
+            walletbalanceloading.show();
+
+            AndroidNetworking.initialize(getApplicationContext());
+            AndroidNetworking.post("https://sgni.in/api/run_new.php")
+
+                    .addBodyParameter("call", "wallb")
+                    .addBodyParameter("s", stu_id)
+                    .setTag("test")
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            walletbalanceloading.dismiss();
+
+                            balLayout.setVisibility(View.VISIBLE);
+
+                            if (response != null && response.length() > 0) {
+
+                                Log.d("response_walletbooknow", "" + response);
+                                try {
+
+                                    JSONArray contacts = response.getJSONArray("data");
+
+                                    TextView wallb = (TextView) findViewById(R.id.addbalace);
+                                    wallb.setText(contacts.getString(0) + " \u20A8");
+                                    WalletBalance = contacts.getString(0);
+
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onError(ANError error) {
+                            // handle error
+                            Log.d("error", "ha ha" + error);
+                        }
+                    });
+        }
     }
 
     @Override

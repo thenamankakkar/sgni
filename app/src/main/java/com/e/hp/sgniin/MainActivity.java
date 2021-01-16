@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity
 
     SharedPreferences sharedPreferences;
     public static final String Studentid = "sid";
+    public static final String Scode = "scode";
     RecyclerView phoneRecycler;
 
     RecyclerView.Adapter adapter;
@@ -103,6 +105,32 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+        String valueofscode = sharedPreferences.getString(Scode, "");
+
+
+
+        //networking libray intialization
+        AndroidNetworking.initialize(getApplicationContext());
+
+        /*navigation drawer*/
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView myCode = (TextView) headerView.findViewById(R.id.myCode);
+        myCode.setText("My Code : "+valueofscode);
+        //myCode.setText("tt");
 
 
 /*bottom-navigation-start*/
@@ -154,8 +182,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        String value = sharedPreferences.getString(Studentid, "");
+
         //Toast.makeText(this, value, Toast.LENGTH_SHORT).show();
 
         //progress dialog
@@ -189,20 +216,7 @@ public class MainActivity extends AppCompatActivity
         mInternetAvailabilityChecker = InternetAvailabilityChecker.getInstance();
         mInternetAvailabilityChecker.addInternetConnectivityListener(this);
 
-        //networking libray intialization
-        AndroidNetworking.initialize(getApplicationContext());
 
-        /*navigation drawer*/
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
 
 
 
